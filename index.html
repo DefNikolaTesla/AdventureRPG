@@ -12,8 +12,8 @@
   <meta name="description" content="An AI-powered infinite choose-your-own-adventure game." />
 
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -675,7 +675,7 @@ const SYS = `You are a master storyteller running an infinite, dynamic choose-yo
 
 You MUST respond ONLY with a single valid JSON object in this EXACT format (no markdown, no preamble, no trailing text):
 {
-  "story": "3-5 paragraphs of immersive, vivid narrative. Reference the consequences of the player's previous choices. Include sensory details — sounds, smells, textures. Build tension and atmosphere.",
+  "story": "2-4 paragraphs of immersive, vivid narrative. Reference the consequences of the player's previous choices. Include sensory details — sounds, smells, textures. Build tension and atmosphere.",
   "choices": ["Choice A (15 words max)", "Choice B (15 words max)", "Choice C (15 words max)", "Choice D (15 words max)"],
   "inventoryAdd": ["Exact item name"],
   "inventoryRemove": ["Exact item name to remove"],
