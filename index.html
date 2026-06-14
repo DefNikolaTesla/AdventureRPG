@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-  <title>Infinite Chronicle - Ultimate Edition</title>
+  <title>Infinite Chronicle</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
@@ -263,8 +263,15 @@ body::before{
   scrollbar-width:none;position:relative;z-index:1;
 }
 #story-area::-webkit-scrollbar{display:none}
-#story-text{font-size:1rem;line-height:1.9;color:#D4BC8A}
-#story-text p{margin-bottom:.9em}
+#story-text{font-size:1.08rem;line-height:2.0;color:#D4BC8A}
+#story-text p{margin-bottom:1.9em; padding-bottom:0.6em}
+#story-text p.dialogue {
+  margin-left: 1.5em;
+  font-style: italic;
+  border-left: 4px solid #C8A055;
+  padding-left: 1.2em;
+  color: #E8C47A;
+}
 .cursor{
   display:inline-block;width:2px;height:1.05em;
   background:#C8A055;margin-left:1px;vertical-align:middle;
@@ -530,7 +537,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══════════ STATS SHEET ══════════ -->
+<!-- ══════════ STATS BOTTOM SHEET ══════════ -->
 <div id="backdrop"></div>
 <div id="sheet" role="dialog" aria-label="Stats">
   <div class="sh-handle"><div class="sh-handle-bar"></div></div>
@@ -635,17 +642,17 @@ const GENRES = [
    prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
 
   {id:'eroticromance',   name:'Erotic Romance',         icon:'🌹', color:'#880E4F', tag:'Passion, tension & desire',
-   prompt:'a charged erotic romance where passionate attraction, sensual tension, and emotional vulnerability intertwine. Explore desire, intimacy, and longing with heat and emotional depth. Relationships are intense, complicated, and deeply felt.'},
+   prompt:'ultimate erotic experience — raw, intensely sensual, psychologically deep stories of desire, lust, power exchange, vulnerability, and physical ecstasy. Explore consent, obsession, dominance/submission, taboo fantasies, emotional intimacy, and escalating sexual tension with unflinching explicitness, vivid sensory detail, and real relational consequences. Every touch, word, and choice carries weight on body, mind, and relationships.'},
 ];
 
 /* ════════════════════════════════════════════
-   AI PROMPTS - ULTIMATE ENHANCED
+   AI PROMPTS - ULTIMATE BOOK EDITION
 ════════════════════════════════════════════ */
 const SYS = `You are a master storyteller crafting an infinite, deeply immersive novel-like choose-your-own-adventure experience. Weave rich, literary prose with novel-like dialogs, intricate plot lines, complex character arcs, sensory immersion, emotional depth, and branching consequences that feel authentic and unpredictable. Every response advances the narrative with cinematic quality, internal monologues, and subtle foreshadowing. Player choices must create genuine divergences in plot, relationships, and world state — no railroading.
 
 You MUST respond ONLY with a single valid JSON object in this EXACT format (no markdown, no preamble, no trailing text):
 {
-  "story": "4-7 paragraphs of lush, novel-quality narrative. Include vivid sensory details, dialogue with unique character voices, emotional introspection, atmospheric tension. Reference past choices' consequences explicitly. Build toward escalating stakes.",
+  "story": "5-8 paragraphs of lush, novel-quality narrative with clear paragraph breaks and separated dialogues. Include vivid sensory details, dialogue with unique character voices, emotional introspection, atmospheric tension. Reference past choices' consequences explicitly. Build toward escalating stakes. Use double newlines between paragraphs for book-like flow.",
   "choices": ["Choice A (18 words max, evocative)", "Choice B (18 words max, evocative)", "Choice C (18 words max, evocative)", "Choice D (18 words max, evocative)"],
   "inventoryAdd": ["Exact item name"],
   "inventoryRemove": ["Exact item name to remove"],
@@ -661,13 +668,13 @@ CRITICAL RULES:
 - Every choice spawns unique cascading effects, moral dilemmas, alliances or betrayals
 - Introduce twists, layered characters with secrets, high emotional stakes
 - NEVER repeat scenarios; evolve the world organically
-- For ALL genres: Prioritize masterful storytelling — deep plots, believable dialogs, character growth
+- For ALL genres: Prioritize masterful storytelling — deep plots, believable dialogs, character growth. Format story with clear paragraphs and dialogues on new lines.
 - For Erotic Romance specifically: Elevate to ultimate sensual genre with tasteful, intense, emotionally charged erotic scenes when choices lead there. Build slow-burn tension, consent-focused passion, psychological intimacy, vivid sensory eroticism intertwined with plot/character development. Never gratuitous — always advance story and relationships.
 - Stay true to genre while delivering literary excellence
 - Do NOT include ANY text outside the JSON object`;
 
 const openingPrompt = g =>
-  `Begin a ${g.name} adventure set in ${g.prompt}\n\nImmerse immediately in a vivid, novel-like opening scene: plunge the player into a tense, sensory-rich moment with immediate stakes, compelling characters, and hooks that demand engagement. Craft the first story segment as high-quality literary prose with dialogue and atmosphere. Avoid clichés like waking up. Make the player care deeply from the first sentence. For Erotic Romance, hint at simmering desire and emotional complexity right away. Ensure genre fidelity with masterful storytelling.`;
+  `Begin a ${g.name} adventure set in ${g.prompt}\n\nImmerse immediately in a vivid, novel-like opening scene: plunge the player into a tense, sensory-rich moment with immediate stakes, compelling characters, and hooks that demand engagement. Craft the first story segment as high-quality literary prose with dialogue and atmosphere. Avoid clichés like waking up. Make the player care deeply from the first sentence. For Erotic Romance, hint at simmering desire and emotional complexity right away. Ensure genre fidelity with masterful storytelling and book-like paragraph spacing.`;
 
 /* ════════════════════════════════════════════
    ITEM ICONS
@@ -853,7 +860,7 @@ async function groq(msgs){
   const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,temperature:0.93,max_tokens:2000}),
+    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,temperature:0.93,max_tokens:2200}),
   });
   if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d?.error?.message||'HTTP '+res.status);}
   const d=await res.json();
