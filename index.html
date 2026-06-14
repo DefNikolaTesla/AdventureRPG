@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-  <title>Infinite Chronicle</title>
+  <title>Infinite Chronicle - Ultimate Edition</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
@@ -634,39 +634,40 @@ const GENRES = [
   {id:'supernatural',    name:'Supernatural / Paranormal', icon:'👁️', color:'#1B5E20', tag:'Spirits, gifts & the veil',
    prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
 
-  {id:'eroticromance',   name:'Erotic',         icon:'🌹', color:'#880E4F', tag:'Passion, tension & desire',
+  {id:'eroticromance',   name:'Erotic Romance',         icon:'🌹', color:'#880E4F', tag:'Passion, tension & desire',
    prompt:'a charged erotic romance where passionate attraction, sensual tension, and emotional vulnerability intertwine. Explore desire, intimacy, and longing with heat and emotional depth. Relationships are intense, complicated, and deeply felt.'},
 ];
 
 /* ════════════════════════════════════════════
-   AI PROMPTS
+   AI PROMPTS - ULTIMATE ENHANCED
 ════════════════════════════════════════════ */
-const SYS = `You are a master storyteller running an infinite, dynamic choose-your-own-adventure game. Every player choice must genuinely alter the upcoming plot — no railroading, no preset paths.
+const SYS = `You are a master storyteller crafting an infinite, deeply immersive novel-like choose-your-own-adventure experience. Weave rich, literary prose with novel-like dialogs, intricate plot lines, complex character arcs, sensory immersion, emotional depth, and branching consequences that feel authentic and unpredictable. Every response advances the narrative with cinematic quality, internal monologues, and subtle foreshadowing. Player choices must create genuine divergences in plot, relationships, and world state — no railroading.
 
 You MUST respond ONLY with a single valid JSON object in this EXACT format (no markdown, no preamble, no trailing text):
 {
-  "story": "2-3 paragraphs of immersive, vivid narrative that fits the chosen genre perfectly. Reference consequences of previous choices. Rich sensory details. Build atmosphere and tension.",
-  "choices": ["Choice A (15 words max)", "Choice B (15 words max)", "Choice C (15 words max)", "Choice D (15 words max)"],
+  "story": "4-7 paragraphs of lush, novel-quality narrative. Include vivid sensory details, dialogue with unique character voices, emotional introspection, atmospheric tension. Reference past choices' consequences explicitly. Build toward escalating stakes.",
+  "choices": ["Choice A (18 words max, evocative)", "Choice B (18 words max, evocative)", "Choice C (18 words max, evocative)", "Choice D (18 words max, evocative)"],
   "inventoryAdd": ["Exact item name"],
   "inventoryRemove": ["Exact item name to remove"],
-  "currentQuest": "One sharp, present-tense sentence describing the current objective.",
-  "location": "2-4 word location name"
+  "currentQuest": "One sharp, present-tense sentence describing the current objective, laced with emotional weight.",
+  "location": "2-5 word evocative location name"
 }
 
 CRITICAL RULES:
-- choices must be an array of exactly 3 or 4 strings
-- inventoryAdd and inventoryRemove must always be arrays (can be empty [])
-- Any item physically found, picked up, or given → inventoryAdd
-- Any item consumed, lost, broken, or given away → inventoryRemove
-- currentQuest must update whenever the player's goal changes
-- Every choice must cause genuinely different consequences
-- Introduce unexpected twists, morally complex characters, surprising cascading consequences
-- NEVER repeat a scenario — NEVER recycle a location unless dramatically revisiting it
-- Stay true to the genre tone, tropes, and atmosphere at all times
+- choices must be an array of exactly 3 or 4 strings, each compelling and tied to potential plot branches
+- inventoryAdd and inventoryRemove must always be arrays (empty [] OK)
+- Track items meticulously for realism
+- Update currentQuest dynamically with player progress
+- Every choice spawns unique cascading effects, moral dilemmas, alliances or betrayals
+- Introduce twists, layered characters with secrets, high emotional stakes
+- NEVER repeat scenarios; evolve the world organically
+- For ALL genres: Prioritize masterful storytelling — deep plots, believable dialogs, character growth
+- For Erotic Romance specifically: Elevate to ultimate sensual genre with tasteful, intense, emotionally charged erotic scenes when choices lead there. Build slow-burn tension, consent-focused passion, psychological intimacy, vivid sensory eroticism intertwined with plot/character development. Never gratuitous — always advance story and relationships.
+- Stay true to genre while delivering literary excellence
 - Do NOT include ANY text outside the JSON object`;
 
 const openingPrompt = g =>
-  `Begin a ${g.name} adventure set in ${g.prompt}\n\nDrop the player into a tense, specific opening moment — mid-action or at a dramatic crossroads. Give them an immediate reason to care. Do NOT start with "You wake up." Be bold, specific, and genre-perfect.`;
+  `Begin a ${g.name} adventure set in ${g.prompt}\n\nImmerse immediately in a vivid, novel-like opening scene: plunge the player into a tense, sensory-rich moment with immediate stakes, compelling characters, and hooks that demand engagement. Craft the first story segment as high-quality literary prose with dialogue and atmosphere. Avoid clichés like waking up. Make the player care deeply from the first sentence. For Erotic Romance, hint at simmering desire and emotional complexity right away. Ensure genre fidelity with masterful storytelling.`;
 
 /* ════════════════════════════════════════════
    ITEM ICONS
@@ -713,20 +714,20 @@ let fullText='', tyTimer=null, onDone=null;
    DOM
 ════════════════════════════════════════════ */
 const $=id=>document.getElementById(id);
-const sSplash=$('s-splash'), sGenre=$('s-genre'), sGame=$('s-game');
-const keyInput=$('key-input'), startBtn=$('start-btn'), spErr=$('sp-err');
-const saveKeyBtn=$('save-key-btn'), savedRow=$('saved-row'), forgetBtn=$('forget-btn');
-const genreGrid=$('genre-grid'), genreStartBtn=$('genre-start-btn'), genreBackBtn=$('genre-back-btn');
-const overlay=$('overlay'), ovText=$('ov-text');
-const storyArea=$('story-area'), storyText=$('story-text'), skipHint=$('skip-hint');
-const choicesLabel=$('choices-label'), choicesGrid=$('choices-grid');
-const loadRow=$('load-row'), loadW=$('load-w'), gameErr=$('game-err');
-const locName=$('loc-name'), genreBadge=$('genre-badge');
-const statsBtn=$('stats-btn'), backdrop=$('backdrop'), sheet=$('sheet'), sheetClose=$('sheet-close');
-const questText=$('quest-text'), invList=$('inv-list'), histSec=$('hist-sec'), histLog=$('hist-log');
-const giIcon=$('gi-icon'), giName=$('gi-name'), giTag=$('gi-tag');
-const changeGenreBtn=$('change-genre-btn'), newGameBtn=$('new-game-btn');
-const installBar=$('install-bar'), ibInstall=$('ib-install'), ibDismiss=$('ib-dismiss');
+const sSplash=\( ('s-splash'), sGenre= \)('s-genre'), sGame=$('s-game');
+const keyInput=\( ('key-input'), startBtn= \)('start-btn'), spErr=$('sp-err');
+const saveKeyBtn=\( ('save-key-btn'), savedRow= \)('saved-row'), forgetBtn=$('forget-btn');
+const genreGrid=\( ('genre-grid'), genreStartBtn= \)('genre-start-btn'), genreBackBtn=$('genre-back-btn');
+const overlay=\( ('overlay'), ovText= \)('ov-text');
+const storyArea=\( ('story-area'), storyText= \)('story-text'), skipHint=$('skip-hint');
+const choicesLabel=\( ('choices-label'), choicesGrid= \)('choices-grid');
+const loadRow=\( ('load-row'), loadW= \)('load-w'), gameErr=$('game-err');
+const locName=\( ('loc-name'), genreBadge= \)('genre-badge');
+const statsBtn=\( ('stats-btn'), backdrop= \)('backdrop'), sheet=\( ('sheet'), sheetClose= \)('sheet-close');
+const questText=\( ('quest-text'), invList= \)('inv-list'), histSec=\( ('hist-sec'), histLog= \)('hist-log');
+const giIcon=\( ('gi-icon'), giName= \)('gi-name'), giTag=$('gi-tag');
+const changeGenreBtn=\( ('change-genre-btn'), newGameBtn= \)('new-game-btn');
+const installBar=\( ('install-bar'), ibInstall= \)('ib-install'), ibDismiss=$('ib-dismiss');
 
 /* ════════════════════════════════════════════
    LOCALSTORAGE KEY MANAGEMENT
@@ -798,7 +799,6 @@ function selectGenre(g,cardEl){
   genreGrid.querySelectorAll('.genre-card').forEach(c=>c.classList.remove('selected'));
   cardEl.classList.add('selected');
   genreStartBtn.disabled=false;
-  // Ripple color on header
   document.documentElement.style.setProperty('--gc',g.color);
 }
 genreStartBtn.addEventListener('click',beginAdventure);
@@ -813,7 +813,6 @@ async function beginAdventure(){
   closeSheet();
   setOverlay(true,'Weaving your fate…');
 
-  // Reset state
   messages=[]; inventory=[]; choiceHist=[]; quest=''; loc='';
   storyText.innerHTML='';
   choicesGrid.innerHTML='';
@@ -824,7 +823,6 @@ async function beginAdventure(){
   locName.textContent='Unknown';
   hideErr(gameErr);
 
-  // Update genre UI
   genreBadge.textContent=selGenre.icon+' '+selGenre.name;
   genreBadge.style.color=selGenre.color;
   giIcon.textContent=selGenre.icon;
@@ -855,7 +853,7 @@ async function groq(msgs){
   const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,temperature:0.93,max_tokens:1200}),
+    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,temperature:0.93,max_tokens:2000}),
   });
   if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d?.error?.message||'HTTP '+res.status);}
   const d=await res.json();
@@ -903,7 +901,7 @@ async function onChoice(txt){
   choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=true);
   choicesLabel.style.display='none';
   choiceHist.push(txt); renderHist();
-  const um={role:'user',content:`Player chose: "${txt}"\n\nInventory: [${inventory.join(', ')}]\nQuest: ${quest}\nLocation: ${loc}\n\nContinue the story in ${selGenre.name} style. This choice must cause genuinely different consequences. Make it matter.`};
+  const um={role:'user',content:`Player chose: "\( {txt}"\n\nInventory: [ \){inventory.join(', ')}]\nQuest: ${quest}\nLocation: ${loc}\n\nContinue the story in ${selGenre.name} style. This choice must cause genuinely different consequences. Make it matter.`};
   const trimmed=messages.length>17?[messages[0],...messages.slice(-16)]:messages;
   const next=[...trimmed,um];
   try{
@@ -954,7 +952,7 @@ function renderInv(fresh){
   if(!inventory.length){invList.innerHTML='<li class="inv-empty">— Empty —</li>';return;}
   invList.innerHTML=inventory.map(item=>{
     const n=fresh&&fresh.has(item);
-    return `<li class="inv-item${n?' new':''}"><span class="inv-icon">${itemIcon(item)}</span>${esc(item)}</li>`;
+    return `<li class="inv-item\( {n?' new':''}"><span class="inv-icon"> \){itemIcon(item)}</span>${esc(item)}</li>`;
   }).join('');
   if(fresh&&fresh.size){
     setTimeout(()=>{invList.querySelectorAll('.new').forEach(el=>el.classList.remove('new'));},3000);
