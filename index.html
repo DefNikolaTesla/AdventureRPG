@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobile-only: no scaling, edge-to-edge -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Chronicle" />
+  <meta name="theme-color" content="#08080F" />
+  <meta name="description" content="An AI-powered infinite choose-your-own-adventure game." />
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <title>Infinite Chronicle</title>
+
+  <style>
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; height: 100dvh; }
+    body {
+      height: 100%; height: 100dvh;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --void:       #08080F;
+      --deep:       #0E0E1C;
+      --panel:      #111120;
+      --border:     #1C1C2E;
+      --border2:    #252540;
+      --gold:       #C8A055;
+      --gold-lt:    #E8C47A;
+      --gold-dim:   #604820;
+      --parch:      #D4BC8A;
+      --parch-dim:  #7A6848;
+      --green:      #1A4D32;
+      --green-lt:   #246642;
+      --green-glow: #3DAF70;
+      --crimson:    #8B1A1A;
+      --crim-lt:    #C03030;
+      --muted:      #30304A;
+      --fog:        #6868A0;
+      --safe-top:    env(safe-area-inset-top,    0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left:   env(safe-area-inset-left,   0px);
+      --safe-right:  env(safe-area-inset-right,  0px);
+      --hdr: 52px;
+      --choices-h: 200px;
+    }
+
+    /* ── AMBIENT BG ─────────────────────────────────────────── */
+    body {
+      background: var(--void);
+      color: var(--parch);
+      font-family: 'IM Fell English', Georgia, serif;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%,   rgba(200,160,85,.055) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 50% 100%, rgba(45,107,74,.05)   0%, transparent 60%);
+      z-index: 0;
+    }
+
+    /* ══════════════════════════════════════════
+       SPLASH SCREEN
+    ══════════════════════════════════════════ */
+    #splash {
+      position: fixed; inset: 0; z-index: 300;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--void);
+      padding: calc(var(--safe-top) + 24px) 28px calc(var(--safe-bottom) + 24px);
+      gap: 0;
+    }
+    #splash::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 90% 70% at 50% 50%, rgba(200,160,85,.07) 0%, transparent 70%);
+    }
+
+    .sp-glyph {
+      font-size: 3.4rem;
+      filter: drop-shadow(0 0 28px rgba(200,160,85,.5));
+      animation: float 4s ease-in-out infinite;
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .sp-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.85rem; font-weight: 700;
+      color: var(--gold-lt);
+      letter-spacing: .16em; text-transform: uppercase;
+      text-shadow: 0 0 40px rgba(200,160,85,.3);
+      text-align: center;
+      margin-bottom: 6px;
+      position: relative; z-index: 1;
+    }
+    .sp-title em { color: var(--gold); font-style: normal; }
+    .sp-sub {
+      font-size: .88rem; color: var(--parch-dim);
+      font-style: italic; text-align: center;
+      margin-bottom: 24px;
+      position: relative; z-index: 1;
+    }
+    .sp-divider {
+      width: 48px; height: 1px;
+      background: var(--gold-dim);
+      margin: 0 auto 22px;
+      position: relative; z-index: 1;
+    }
+    .sp-divider::before {
+      content: '✦';
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--void); padding: 0 6px;
+      font-size: .5rem; color: var(--gold-dim);
+    }
+    .sp-pills {
+      display: flex; flex-wrap: wrap;
+      gap: 10px 14px; justify-content: center;
+      margin-bottom: 28px;
+      position: relative; z-index: 1;
+    }
+    .sp-pill {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .6rem; color: var(--fog);
+      letter-spacing: .1em;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sp-dot { width: 4px; height: 4px; background: var(--green-glow); border-radius: 50%; }
+
+    .sp-form {
+      display: flex; flex-direction: column; gap: 10px;
+      width: 100%; max-width: 340px;
+      position: relative; z-index: 1;
+    }
+    .sp-lbl {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .6rem; color: var(--gold-dim);
+      letter-spacing: .2em; text-transform: uppercase;
+    }
+    .sp-input {
+      background: var(--deep);
+      border: 1px solid var(--gold-dim);
+      color: var(--parch);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px; /* 16px prevents iOS zoom */
+      padding: 14px 16px;
+      outline: none; width: 100%;
+      transition: border-color .2s;
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+    .sp-input:focus { border-color: var(--gold); }
+    .sp-input::placeholder { color: var(--muted); font-size: .78rem; }
+
+    .sp-btn {
+      background: var(--green);
+      border: none; color: var(--gold-lt);
+      font-family: 'Cinzel', serif;
+      font-size: .82rem; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 16px 24px;
+      cursor: pointer; border-radius: 0;
+      transition: background .2s;
+      -webkit-appearance: none;
+      margin-top: 2px;
+    }
+    .sp-btn:active:not(:disabled) { background: var(--green-lt); }
+    .sp-btn:disabled { opacity: .3; }
+
+    .sp-note {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .58rem; color: var(--muted);
+      text-align: center; margin-top: 2px;
+    }
+    .sp-note a { color: var(--gold-dim); text-decoration: none; }
+
+    .err-bar {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .68rem; color: var(--crim-lt);
+      background: rgba(139,26,26,.12);
+      border: 1px solid var(--crimson);
+      padding: 9px 12px; display: none;
+    }
+    .err-bar.on { display: block; }
+
+    /* ══════════════════════════════════════════
+       APP SHELL  (hidden until game starts)
+    ══════════════════════════════════════════ */
+    #app {
+      position: fixed; inset: 0; z-index: 1;
+      display: none; flex-direction: column;
+      padding-top: var(--safe-top);
+    }
+    #app.on { display: flex; }
+
+    /* ── HEADER ─────────────────────────────── */
+    #hdr {
+      height: var(--hdr);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: var(--deep);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      position: relative; z-index: 10;
+    }
+    #hdr-title {
+      font-family: 'Cinzel', serif;
+      font-size: .95rem; font-weight: 700;
+      color: var(--gold);
+      letter-spacing: .16em; text-transform: uppercase;
+    }
+    #hdr-title em { color: var(--gold-lt); font-style: normal;
+      text-shadow: 0 0 16px rgba(200,160,85,.4); }
+    #loc-wrap {
+      display: flex; align-items: center; gap: 8px;
+    }
+    #loc-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .6rem; color: var(--gold-dim);
+      letter-spacing: .1em; text-transform: uppercase;
+      border: 1px solid var(--gold-dim);
+      padding: 3px 8px; white-space: nowrap;
+      max-width: 110px; overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color .4s, border-color .4s;
+    }
+    #stats-btn {
+      width: 36px; height: 36px;
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      color: var(--fog);
+      font-size: 1.05rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    #stats-btn:active { background: var(--border2); color: var(--parch); }
+
+    /* ── STORY AREA ─────────────────────────── */
+    #story-area {
+      flex: 1;
+      overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      padding: 20px 18px 12px;
+      scrollbar-width: none;
+      position: relative; z-index: 1;
+    }
+    #story-area::-webkit-scrollbar { display: none; }
+
+    #story-text {
+      font-size: 1rem; line-height: 1.9;
+      color: var(--parch);
+    }
+    #story-text p { margin-bottom: .95em; }
+
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 1.05em;
+      background: var(--gold);
+      margin-left: 1px; vertical-align: middle;
+      animation: blink .75s step-end infinite;
+    }
+    #skip-hint {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .6rem; color: var(--muted);
+      text-align: center; margin-top: 10px;
+      display: none;
+    }
+    #skip-hint.on { display: block; }
+
+    /* ── CHOICES PANEL ──────────────────────── */
+    #choices-panel {
+      flex-shrink: 0;
+      background: linear-gradient(to top, var(--deep) 60%, transparent);
+      border-top: 1px solid var(--border);
+      padding: 12px 14px calc(var(--safe-bottom) + 14px);
+      position: relative; z-index: 5;
+    }
+    #choices-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .58rem; color: var(--muted);
+      letter-spacing: .2em; text-transform: uppercase;
+      margin-bottom: 8px; display: none;
+    }
+    #choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+    .c-btn {
+      background: rgba(26,77,50,.25);
+      border: 1px solid var(--green);
+      color: var(--parch);
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: .85rem; line-height: 1.35;
+      padding: 11px 10px; text-align: left;
+      cursor: pointer; min-height: 52px;
+      transition: background .15s, border-color .15s, color .15s;
+      -webkit-appearance: none; border-radius: 0;
+    }
+    .c-btn::before {
+      content: '▶ ';
+      font-size: .5rem; color: var(--green-glow);
+      opacity: 0; transition: opacity .15s;
+    }
+    .c-btn:active:not(:disabled) {
+      background: rgba(36,102,66,.4);
+      border-color: var(--green-glow);
+      color: var(--gold-lt);
+    }
+    .c-btn:active:not(:disabled)::before { opacity: 1; }
+    .c-btn:disabled { opacity: .2; }
+
+    /* Loading state inside choices panel */
+    #load-row {
+      display: none; align-items: center; gap: 10px;
+      padding: 4px 0;
+    }
+    #load-row.on { display: flex; }
+    .spin-r { font-size: .9rem; color: var(--gold); animation: spin 2s linear infinite; }
+    .load-w  {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .68rem; color: var(--gold-dim);
+      letter-spacing: .15em;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    #game-err { margin-top: 8px; }
+
+    /* ══════════════════════════════════════════
+       STATS BOTTOM SHEET
+    ══════════════════════════════════════════ */
+    #backdrop {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #backdrop.on { opacity: 1; pointer-events: auto; }
+
+    #sheet {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      z-index: 60;
+      background: var(--panel);
+      border-top: 1px solid var(--border2);
+      border-radius: 20px 20px 0 0;
+      max-height: 82vh;
+      transform: translateY(100%);
+      transition: transform .32s cubic-bezier(.32,0,.67,0);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      padding-bottom: var(--safe-bottom);
+    }
+    #sheet.on {
+      transform: translateY(0);
+      transition: transform .32s cubic-bezier(.33,1,.68,1);
+    }
+
+    /* Drag handle */
+    .sh-handle {
+      flex-shrink: 0;
+      display: flex; justify-content: center;
+      padding: 12px 0 8px;
+      cursor: grab;
+    }
+    .sh-handle-bar {
+      width: 36px; height: 4px;
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    /* Sheet header row */
+    .sh-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 18px 14px;
+      flex-shrink: 0;
+    }
+    .sh-title {
+      font-family: 'Cinzel', serif;
+      font-size: .7rem; font-weight: 600;
+      color: var(--gold-dim);
+      letter-spacing: .22em; text-transform: uppercase;
+    }
+    .sh-close {
+      width: 32px; height: 32px;
+      background: var(--border);
+      border: none; color: var(--fog);
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border-radius: 50%;
+    }
+    .sh-close:active { background: var(--border2); color: var(--parch); }
+
+    /* Sheet scroll area */
+    #sheet-scroll {
+      flex: 1; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 0 16px;
+      scrollbar-width: none;
+    }
+    #sheet-scroll::-webkit-scrollbar { display: none; }
+
+    /* Sections inside sheet */
+    .sh-sec {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sh-sec:last-child { border-bottom: none; }
+    .sh-sec-lbl {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem; font-weight: 600;
+      color: var(--gold-dim);
+      letter-spacing: .24em; text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sh-sec-lbl::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    #quest-text {
+      font-size: .9rem; line-height: 1.65;
+      color: var(--fog); font-style: italic;
+      transition: color .5s;
+    }
+    #quest-text.live { color: var(--gold-lt); font-style: normal; }
+
+    #inv-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .inv-empty {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .68rem; color: var(--muted); font-style: italic;
+    }
+    .inv-item {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .72rem; color: var(--parch-dim);
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      background: rgba(200,160,85,.025);
+      display: flex; align-items: center; gap: 8px;
+      transition: border-color .3s, color .3s, background .3s;
+    }
+    .inv-item.new {
+      border-color: var(--green-lt);
+      color: var(--green-glow);
+      background: rgba(36,102,66,.12);
+      animation: slideIn .4s ease;
+    }
+    .inv-icon { font-size: .85rem; }
+
+    /* History */
+    #hist-log { display: flex; flex-direction: column; gap: 6px; }
+    .hist-entry {
+      font-size: .78rem; color: var(--muted);
+      font-style: italic; line-height: 1.45;
+      padding-left: 10px;
+      border-left: 2px solid var(--border2);
+      animation: fadeIn .4s ease;
+    }
+
+    /* New game button inside sheet */
+    #new-game-btn {
+      margin: 16px 18px 4px;
+      background: transparent;
+      border: 1px solid var(--crimson);
+      color: var(--crim-lt);
+      font-family: 'Cinzel', serif;
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      padding: 13px 20px;
+      cursor: pointer; width: calc(100% - 36px);
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    #new-game-btn:active { background: rgba(139,26,26,.2); }
+
+    /* ══════════════════════════════════════════
+       FULL-SCREEN LOADING OVERLAY
+    ══════════════════════════════════════════ */
+    #overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(8,8,15,.92);
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px;
+    }
+    #overlay.on { display: flex; }
+    .ov-rune { font-size: 2.2rem; color: var(--gold); animation: spin 2.5s linear infinite; }
+    .ov-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .72rem; color: var(--gold-dim);
+      letter-spacing: .2em;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    /* ══════════════════════════════════════════
+       INSTALL BANNER  (shown when installable)
+    ══════════════════════════════════════════ */
+    #install-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 400; display: none;
+      align-items: center; justify-content: space-between;
+      gap: 10px;
+      background: var(--deep);
+      border-top: 1px solid var(--border2);
+      padding: 12px 18px calc(var(--safe-bottom) + 12px);
+    }
+    #install-bar.on { display: flex; }
+    .ib-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .65rem; color: var(--fog);
+      letter-spacing: .08em; flex: 1;
+    }
+    .ib-text strong { color: var(--parch); display: block; }
+    .ib-install {
+      background: var(--green);
+      border: none; color: var(--gold-lt);
+      font-family: 'Cinzel', serif;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase;
+      padding: 10px 16px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .ib-install:active { background: var(--green-lt); }
+    .ib-dismiss {
+      background: none; border: none;
+      color: var(--muted); font-size: 1.1rem;
+      cursor: pointer; padding: 4px;
+    }
+
+    /* ── KEYFRAMES ──────────────────────────── */
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-9px); }
+    }
+    @keyframes blink  { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    @keyframes spin   { to { transform: rotate(360deg); } }
+    @keyframes pulse  { 0%,100% { opacity:.4; } 50% { opacity:1; } }
+    @keyframes slideIn {
+      from { opacity:0; transform: translateX(-10px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ SPLASH ═════════════════════════════ -->
+<div id="splash">
+  <div class="sp-glyph">⚔</div>
+  <div class="sp-title">Infinite <em>Chronicle</em></div>
+  <p class="sp-sub">Every choice reshapes the world.</p>
+  <div class="sp-divider"></div>
+
+  <div class="sp-pills">
+    <div class="sp-pill"><div class="sp-dot"></div>AI Narrative</div>
+    <div class="sp-pill"><div class="sp-dot"></div>Live Inventory</div>
+    <div class="sp-pill"><div class="sp-dot"></div>Quest Tracker</div>
+    <div class="sp-pill"><div class="sp-dot"></div>True Branching</div>
+  </div>
+
+  <div class="sp-form">
+    <label class="sp-lbl" for="key-input">Groq API Key</label>
+    <input id="key-input" class="sp-input" type="password"
+           placeholder="gsk_••••••••••••••••"
+           autocomplete="off" spellcheck="false" />
+    <div id="sp-err" class="err-bar"></div>
+    <button id="start-btn" class="sp-btn" disabled>Begin Your Journey</button>
+    <p class="sp-note">
+      Free key at <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>
+      &nbsp;·&nbsp; Stays in your browser only
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════ APP SHELL ══════════════════════════ -->
+<div id="app">
+
+  <!-- Header -->
+  <header id="hdr">
+    <div id="hdr-title">⚔ Infinite <em>Chronicle</em></div>
+    <div id="loc-wrap">
+      <div id="loc-badge">◈ &thinsp;<span id="loc-name">Unknown</span></div>
+      <button id="stats-btn" aria-label="Open stats">📜</button>
+    </div>
+  </header>
+
+  <!-- Story scroll -->
+  <main id="story-area">
+    <div id="story-text"></div>
+    <p id="skip-hint">Tap to skip…</p>
+  </main>
+
+  <!-- Choices -->
+  <div id="choices-panel">
+    <div id="choices-label">What do you do?</div>
+    <div id="choices-grid"></div>
+    <div id="load-row">
+      <span class="spin-r">✦</span>
+      <span class="load-w" id="load-w">The fates deliberate…</span>
+    </div>
+    <div id="game-err" class="err-bar"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ STATS SHEET ════════════════════════ -->
+<div id="backdrop"></div>
+<div id="sheet" role="dialog" aria-label="Stats">
+  <div class="sh-handle"><div class="sh-handle-bar"></div></div>
+  <div class="sh-header">
+    <div class="sh-title">Adventure Stats</div>
+    <button class="sh-close" id="sheet-close" aria-label="Close">✕</button>
+  </div>
+  <div id="sheet-scroll">
+
+    <div class="sh-sec">
+      <div class="sh-sec-lbl">Current Quest</div>
+      <p id="quest-text">Awaiting your fate…</p>
+    </div>
+
+    <div class="sh-sec">
+      <div class="sh-sec-lbl">Inventory</div>
+      <ul id="inv-list"><li class="inv-empty">— Empty —</li></ul>
+    </div>
+
+    <div class="sh-sec" id="hist-sec" style="display:none">
+      <div class="sh-sec-lbl">Your Path</div>
+      <div id="hist-log"></div>
+    </div>
+
+  </div>
+  <button id="new-game-btn">↺ &nbsp;New Game</button>
+</div>
+
+<!-- Full-screen overlay -->
+<div id="overlay">
+  <div class="ov-rune">✦</div>
+  <p class="ov-text" id="ov-text">Weaving your fate…</p>
+</div>
+
+<!-- Install banner -->
+<div id="install-bar">
+  <div class="ib-text">
+    <strong>Add to Home Screen</strong>
+    Play offline, feel native
+  </div>
+  <button class="ib-install" id="ib-install">Install</button>
+  <button class="ib-dismiss" id="ib-dismiss" aria-label="Dismiss">✕</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PROMPTS
+═══════════════════════════════════════════════════════════ */
+const SYS = `You are a master storyteller running an infinite, dynamic choose-your-own-adventure game. Every player choice must genuinely alter the upcoming plot — no railroading, no preset paths.
+
+You MUST respond ONLY with a single valid JSON object in this EXACT format (no markdown, no preamble, no trailing text):
+{
+  "story": "3-5 paragraphs of immersive, vivid narrative. Reference the consequences of the player's previous choices. Include sensory details — sounds, smells, textures. Build tension and atmosphere.",
+  "choices": ["Choice A (15 words max)", "Choice B (15 words max)", "Choice C (15 words max)", "Choice D (15 words max)"],
+  "inventoryAdd": ["Exact item name"],
+  "inventoryRemove": ["Exact item name to remove"],
+  "currentQuest": "One sharp, present-tense sentence describing the current objective.",
+  "location": "2-4 word location name"
+}
+
+CRITICAL RULES:
+- choices must be an array of exactly 3 or 4 strings
+- inventoryAdd and inventoryRemove must always be arrays (can be empty [])
+- Any item physically found, picked up, or given in the story → inventoryAdd
+- Any item consumed, lost, broken, or given away in the story → inventoryRemove
+- currentQuest must update whenever the player's goal changes
+- Every choice must cause genuinely different consequences — they must matter
+- Introduce unexpected twists, morally complex characters, surprising cascading consequences
+- NEVER repeat a scenario or recycle a location unless dramatically revisiting it
+- Do NOT include ANY text outside the JSON object`;
+
+const OPEN = `Begin a new adventure. Choose a compelling, unexpected genre blend (examples: gothic space opera, underwater noir, clockpunk folklore, desert solarpunk, arctic cosmic horror, haunted tech dystopia) and drop the player into a tense, specific opening moment — mid-action or at a dramatic crossroads. Give them an immediate reason to care. Do NOT start with "You wake up." Be bold and specific.`;
+
+/* ═══════════════════════════════════════════════════════════
+   ITEM ICONS
+═══════════════════════════════════════════════════════════ */
+const ICONS = {
+  sword:'⚔',blade:'⚔',knife:'⚔',dagger:'⚔',rapier:'⚔',spear:'⚔',axe:'⚔',
+  key:'🗝',keys:'🗝',
+  map:'🗺',scroll:'📜',letter:'📜',note:'📜',tome:'📖',book:'📖',journal:'📖',manuscript:'📖',
+  coin:'💰',gold:'💰',silver:'💰',gem:'💎',jewel:'💎',crystal:'💎',ruby:'💎',
+  potion:'⚗',vial:'⚗',elixir:'⚗',flask:'⚗',serum:'⚗',
+  torch:'🕯',lantern:'🕯',candle:'🕯',
+  ring:'💍',amulet:'📿',necklace:'📿',pendant:'📿',locket:'📿',
+  cloak:'🧥',coat:'🧥',robe:'🧥',jacket:'🧥',
+  gun:'🔫',pistol:'🔫',revolver:'🔫',rifle:'🔫',
+  staff:'🪄',wand:'🪄',rod:'🪄',
+  shield:'🛡',buckler:'🛡',
+  food:'🍞',bread:'🍞',ration:'🍞',meat:'🍖',apple:'🍎',
+  herb:'🌿',plant:'🌿',flower:'🌸',seed:'🌿',
+  bone:'🦴',skull:'💀',
+  rope:'〰',chain:'⛓',wire:'〰',
+  compass:'🧭',watch:'⌚',clock:'⏱',
+  badge:'🪙',token:'🪙',coin:'🪙',
+};
+const itemIcon = n => {
+  const lo = n.toLowerCase();
+  for (const [k,v] of Object.entries(ICONS)) if (lo.includes(k)) return v;
+  return '◈';
+};
+
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+let apiKey   = '';
+let messages = [];
+let inventory = [];
+let choiceHist = [];
+let quest  = '';
+let loc    = '';
+let typing = false;
+let loading= false;
+let fullText = '';
+let tyTimer  = null;
+let onTypeDone = null;
+
+/* ═══════════════════════════════════════════════════════════
+   DOM
+═══════════════════════════════════════════════════════════ */
+const $  = id => document.getElementById(id);
+const splash    = $('splash');
+const keyInput  = $('key-input');
+const startBtn  = $('start-btn');
+const spErr     = $('sp-err');
+const app       = $('app');
+const overlay   = $('overlay');
+const ovText    = $('ov-text');
+const storyArea = $('story-area');
+const storyText = $('story-text');
+const skipHint  = $('skip-hint');
+const choicesLbl= $('choices-label');
+const choicesGrid=$('choices-grid');
+const loadRow   = $('load-row');
+const loadW     = $('load-w');
+const gameErr   = $('game-err');
+const locName   = $('loc-name');
+const locBadge  = $('loc-badge');
+const statsBtn  = $('stats-btn');
+const backdrop  = $('backdrop');
+const sheet     = $('sheet');
+const sheetClose= $('sheet-close');
+const questText = $('quest-text');
+const invList   = $('inv-list');
+const histSec   = $('hist-sec');
+const histLog   = $('hist-log');
+const newGameBtn= $('new-game-btn');
+const installBar= $('install-bar');
+const ibInstall = $('ib-install');
+const ibDismiss = $('ib-dismiss');
+
+/* ═══════════════════════════════════════════════════════════
+   SPLASH
+═══════════════════════════════════════════════════════════ */
+keyInput.addEventListener('input', () => {
+  startBtn.disabled = !keyInput.value.trim();
+  hideErr(spErr);
+});
+keyInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !startBtn.disabled) doStart();
+});
+startBtn.addEventListener('click', doStart);
+
+async function doStart() {
+  const k = keyInput.value.trim();
+  if (!k) return;
+  apiKey = k;
+  setOverlay(true, 'Weaving your fate…');
+  hideErr(spErr);
+
+  const init = [
+    { role:'system', content: SYS },
+    { role:'user',   content: OPEN },
+  ];
+  try {
+    const r = await groq(init, k);
+    messages = [...init, { role:'assistant', content: JSON.stringify(r) }];
+    inventory = []; choiceHist = []; quest = ''; loc = '';
+    applyResult(r);
+    splash.style.display = 'none';
+    app.classList.add('on');
+  } catch(e) {
+    showErr(spErr, '⚠ ' + (e.message || 'Check your API key and try again.'));
+  } finally {
+    setOverlay(false);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GROQ CALL
+═══════════════════════════════════════════════════════════ */
+async function groq(msgs, overKey) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + (overKey || apiKey),
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: msgs,
+      temperature: 0.93,
+      max_tokens: 1200,
+    }),
+  });
+  if (!res.ok) {
+    const d = await res.json().catch(()=>({}));
+    throw new Error(d?.error?.message || 'HTTP ' + res.status);
+  }
+  const d   = await res.json();
+  const raw = d?.choices?.[0]?.message?.content || '';
+  const m   = raw.match(/\{[\s\S]*\}/);
+  if (!m) throw new Error('Unexpected response — please try again.');
+  return JSON.parse(m[0]);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   APPLY RESULT
+═══════════════════════════════════════════════════════════ */
+function applyResult(r) {
+  const {
+    story='', choices=[], location:l='', currentQuest:q='',
+    inventoryAdd:iadd=[], inventoryRemove:irem=[],
+  } = r;
+
+  // Inventory
+  const removed = new Set((irem||[]).map(s=>s.toLowerCase()));
+  inventory = inventory.filter(i=>!removed.has(i.toLowerCase()));
+  const added = (iadd||[]).map(s=>s.trim()).filter(Boolean);
+  const fresh = added.filter(i=>!inventory.find(x=>x.toLowerCase()===i.toLowerCase()));
+  inventory = [...inventory, ...fresh];
+  renderInv(new Set(fresh));
+
+  // Quest
+  if (q && q !== quest) {
+    quest = q;
+    questText.textContent = q;
+    questText.classList.add('live');
+  }
+
+  // Location
+  if (l && l !== loc) {
+    loc = l;
+    locName.textContent = l;
+  }
+
+  // Pre-render choices as disabled
+  choicesGrid.innerHTML = '';
+  choicesLbl.style.display = 'none';
+  const safe = Array.isArray(choices) ? choices.slice(0,4) : [];
+  safe.forEach(txt => {
+    const b = document.createElement('button');
+    b.className = 'c-btn'; b.textContent = txt; b.disabled = true;
+    b.addEventListener('click', () => onChoice(txt));
+    choicesGrid.appendChild(b);
+  });
+
+  // Typewrite
+  typewrite(story, () => {
+    choicesLbl.style.display = safe.length ? 'block' : 'none';
+    choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=false);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PLAYER CHOICE
+═══════════════════════════════════════════════════════════ */
+async function onChoice(txt) {
+  if (loading || typing) return;
+  setLoading(true, 'The fates deliberate…');
+  hideErr(gameErr);
+  choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=true);
+  choicesLbl.style.display = 'none';
+
+  choiceHist.push(txt);
+  renderHist();
+
+  const userMsg = {
+    role:'user',
+    content:`Player chose: "${txt}"\n\nCurrent inventory: [${inventory.join(', ')}]\nCurrent quest: ${quest}\nLocation: ${loc}\n\nContinue the story. This choice must cause genuinely different consequences. Make it matter.`,
+  };
+  const trimmed = messages.length > 17
+    ? [messages[0], ...messages.slice(-16)]
+    : messages;
+  const next = [...trimmed, userMsg];
+
+  try {
+    const r = await groq(next);
+    messages = [...next, { role:'assistant', content: JSON.stringify(r) }];
+    applyResult(r);
+  } catch(e) {
+    showErr(gameErr, '⚠ ' + (e.message || 'Something went wrong.'));
+    choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=false);
+    choicesLbl.style.display = 'block';
+  } finally {
+    setLoading(false);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TYPEWRITER
+═══════════════════════════════════════════════════════════ */
+function typewrite(text, done) {
+  clearInterval(tyTimer);
+  fullText = text; typing = true; onTypeDone = done;
+  storyText.innerHTML = ''; skipHint.classList.add('on');
+  let i = 0;
+  tyTimer = setInterval(() => {
+    i++; renderST(text.slice(0,i));
+    storyArea.scrollTop = storyArea.scrollHeight;
+    if (i >= text.length) {
+      clearInterval(tyTimer);
+      typing = false; skipHint.classList.remove('on');
+      if (done) done();
+    }
+  }, 15);
+}
+function skipTW() {
+  if (!typing) return;
+  clearInterval(tyTimer); typing = false;
+  renderST(fullText); skipHint.classList.remove('on');
+  storyArea.scrollTop = storyArea.scrollHeight;
+  if (onTypeDone) { onTypeDone(); onTypeDone = null; }
+}
+function renderST(t) {
+  const ps = t.split(/\n+/).filter(Boolean);
+  storyText.innerHTML = ps.map(p=>`<p>${esc(p)}</p>`).join('') + (typing?'<span class="cursor"></span>':'');
+}
+
+storyArea.addEventListener('click', () => {
+  if (sheet.classList.contains('on')) return; // don't skip if sheet is open
+  if (typing) skipTW();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER HELPERS
+═══════════════════════════════════════════════════════════ */
+function renderInv(fresh) {
+  if (!inventory.length) {
+    invList.innerHTML = '<li class="inv-empty">— Empty —</li>'; return;
+  }
+  invList.innerHTML = inventory.map(item=>{
+    const n = fresh && fresh.has(item);
+    return `<li class="inv-item${n?' new':''}">
+      <span class="inv-icon">${itemIcon(item)}</span>${esc(item)}
+    </li>`;
+  }).join('');
+  if (fresh && fresh.size) {
+    setTimeout(()=>{ invList.querySelectorAll('.new').forEach(el=>el.classList.remove('new')); }, 3000);
+  }
+}
+function renderHist() {
+  if (!choiceHist.length) return;
+  histSec.style.display = 'block';
+  histLog.innerHTML = [...choiceHist].reverse().slice(0,10)
+    .map(c=>`<div class="hist-entry">"${esc(c)}"</div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STATS SHEET
+═══════════════════════════════════════════════════════════ */
+function openSheet()  { sheet.classList.add('on'); backdrop.classList.add('on'); }
+function closeSheet() { sheet.classList.remove('on'); backdrop.classList.remove('on'); }
+
+statsBtn.addEventListener('click',  openSheet);
+sheetClose.addEventListener('click',closeSheet);
+backdrop.addEventListener('click',  closeSheet);
+
+/* Drag to dismiss sheet */
+let sheetDragY = null, sheetStartT = null;
+sheet.addEventListener('touchstart', e => {
+  const touch = e.touches[0];
+  sheetDragY = touch.clientY;
+  sheetStartT = Date.now();
+}, { passive:true });
+sheet.addEventListener('touchmove', e => {
+  if (sheetDragY === null) return;
+  const dy = e.touches[0].clientY - sheetDragY;
+  if (dy > 0) sheet.style.transform = `translateY(${dy}px)`;
+}, { passive:true });
+sheet.addEventListener('touchend', e => {
+  const dy = e.changedTouches[0].clientY - (sheetDragY||0);
+  sheet.style.transform = '';
+  if (dy > 80) closeSheet();
+  sheetDragY = null;
+}, { passive:true });
+
+/* ═══════════════════════════════════════════════════════════
+   NEW GAME
+═══════════════════════════════════════════════════════════ */
+newGameBtn.addEventListener('click', async () => {
+  if (!confirm('Start a brand-new adventure? Your current story will be lost.')) return;
+  closeSheet();
+  // Reset UI
+  storyText.innerHTML = '';
+  choicesGrid.innerHTML = '';
+  choicesLbl.style.display = 'none';
+  invList.innerHTML = '<li class="inv-empty">— Empty —</li>';
+  histLog.innerHTML = ''; histSec.style.display = 'none';
+  questText.textContent = 'Awaiting your fate…'; questText.classList.remove('live');
+  locName.textContent = 'Unknown';
+  messages=[]; inventory=[]; choiceHist=[]; quest=''; loc='';
+  hideErr(gameErr);
+
+  setOverlay(true, 'Weaving your fate…');
+  const init = [
+    { role:'system', content: SYS },
+    { role:'user',   content: OPEN },
+  ];
+  try {
+    const r = await groq(init);
+    messages = [...init, { role:'assistant', content: JSON.stringify(r) }];
+    applyResult(r);
+  } catch(e) {
+    showErr(gameErr, '⚠ ' + (e.message || 'Something went wrong.'));
+  } finally {
+    setOverlay(false);
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   UI STATE HELPERS
+═══════════════════════════════════════════════════════════ */
+function setLoading(on, msg) {
+  loading = on;
+  loadRow.classList.toggle('on', on);
+  if (msg) loadW.textContent = msg;
+  const noText = !storyText.textContent.trim();
+  if (on && noText) setOverlay(true, msg);
+  else setOverlay(false);
+}
+function setOverlay(on, msg) {
+  overlay.classList.toggle('on', on);
+  if (msg) ovText.textContent = msg;
+}
+function showErr(el, msg) { el.textContent = msg; el.classList.add('on'); }
+function hideErr(el)      { el.textContent = '';  el.classList.remove('on'); }
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICE WORKER
+═══════════════════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(console.warn);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PWA INSTALL PROMPT
+═══════════════════════════════════════════════════════════ */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBar.classList.add('on');
+});
+ibInstall.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') installBar.classList.remove('on');
+  deferredPrompt = null;
+});
+ibDismiss.addEventListener('click', () => {
+  installBar.classList.remove('on');
+  deferredPrompt = null;
+});
+window.addEventListener('appinstalled', () => {
+  installBar.classList.remove('on');
+});
+
+/* ═══════════════════════════════════════════════════════════
+   PREVENT PULL-TO-REFRESH on Android Chrome
+═══════════════════════════════════════════════════════════ */
+document.addEventListener('touchmove', e => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive:false });
+</script>
+</body>
+</html>
