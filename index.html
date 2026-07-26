@@ -574,7 +574,7 @@ async function beginAdventure(){
 /* ════════════════════════════════════════════
    GROQ API
 ════════════════════════════════════════════ */
-async function groq(msgs){
+async function groq(msgs) {
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -586,7 +586,6 @@ async function groq(msgs){
       messages: msgs,
       temperature: 0.85,
       max_tokens: 2200,
-      response_format: { type: 'json_object' }
     }),
   });
 
@@ -598,21 +597,38 @@ async function groq(msgs){
   const d = await res.json();
   let raw = d?.choices?.[0]?.message?.content || '';
 
-  const start = raw.indexOf('{');
-  const end = raw.lastIndexOf('}');
-  if (start === -1 || end === -1) {
+  const braceStart = raw.indexOf('{');
+  const braceEnd = raw.lastIndexOf('}');
+  if (braceStart === -1 || braceEnd === -1) {
     throw new Error('No valid JSON found in response');
   }
 
-  let jsonStr = raw.slice(start, end + 1);
+  let jsonStr = raw.slice(braceStart, braceEnd + 1);
 
-  // Escape any stray control characters so JSON.parse never chokes
-  jsonStr = jsonStr.replace(/[\x00-\x1f]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+  // Escape every illegal JSON character
+  jsonStr = jsonStr.replace(/[\x00-\x1f\u2028\u2029]/g,
+    c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 
+  // Try to parse; if it fails, attempt regex extraction as fallback
   try {
     return JSON.parse(jsonStr);
   } catch (e) {
-    console.error('Parse failed. Raw response:', raw);
+    // Fallback: try to extract each field with regex
+    const s = (r, d) => {
+      const m = jsonStr.match(new RegExp('"' + r + '"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"'));
+      return m ? JSON.parse('"' + m[1] + '"') : d;
+    };
+    const a = (r, d) => {
+      const m = jsonStr.match(new RegExp('"' + r + '"\\s*:\\s*\\[([^\\]]*)\\]'));
+      return m ? m[1].split(',').map(x => x.replace(/^"|"$/g, '').trim()).filter(Boolean) : d;
+    };
+    const story = s('story', '');
+    const choices = a('choices', []);
+    const loc = s('location', '');
+    const quest = s('currentQuest', '');
+    const invAdd = a('inventoryAdd', []);
+    const invRemove = a('inventoryRemove', []);
+    if (story) return { story, choices, location: loc, currentQuest: quest, inventoryAdd: invAdd, inventoryRemove: invRemove };
     throw new Error('Failed to generate valid JSON. Please try again.');
   }
 }
