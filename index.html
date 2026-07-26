@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Chronicle"/>
-  <meta name="theme-color" content="#08080F"/>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
-  <title>Infinite Chronicle</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Chronicle"/>
+<meta name="theme-color" content="#08080F"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<title>Infinite Chronicle</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
@@ -32,437 +32,158 @@ body::before{
     radial-gradient(ellipse 80% 40% at 50% 0%,rgba(200,160,85,.055) 0%,transparent 60%),
     radial-gradient(ellipse 60% 50% at 50% 100%,rgba(45,107,74,.05) 0%,transparent 60%);
 }
-
 /* ── SCREENS ── */
 .screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;background:#08080F}
 .screen.active{display:flex}
 
-/* ════════════════════════════════════
-   SPLASH — API KEY
-════════════════════════════════════ */
+/* SPLASH — API KEY */
 #s-splash{
   align-items:center;justify-content:center;
-  padding:calc(env(safe-area-inset-top,0px) + 24px) 28px
-          calc(env(safe-area-inset-bottom,0px) + 24px);
+  padding:calc(env(safe-area-inset-top,0px) + 24px) 28px calc(env(safe-area-inset-bottom,0px) + 24px);
   gap:0;
 }
 #s-splash::before{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 90% 70% at 50% 50%,rgba(200,160,85,.07) 0%,transparent 70%);
 }
-.sp-glyph{
-  font-size:3.2rem;filter:drop-shadow(0 0 28px rgba(200,160,85,.5));
-  animation:float 4s ease-in-out infinite;margin-bottom:18px;position:relative;z-index:1;
-}
-.sp-title{
-  font-family:'Cinzel',serif;font-size:1.85rem;font-weight:700;
-  color:#E8C47A;letter-spacing:.16em;text-transform:uppercase;
-  text-shadow:0 0 40px rgba(200,160,85,.3);text-align:center;margin-bottom:6px;
-  position:relative;z-index:1;
-}
+.sp-glyph{font-size:3.2rem;filter:drop-shadow(0 0 28px rgba(200,160,85,.5));animation:float 4s ease-in-out infinite;margin-bottom:18px;position:relative;z-index:1;}
+.sp-title{font-family:'Cinzel',serif;font-size:1.85rem;font-weight:700;color:#E8C47A;letter-spacing:.16em;text-transform:uppercase;text-shadow:0 0 40px rgba(200,160,85,.3);text-align:center;margin-bottom:6px;position:relative;z-index:1;}
 .sp-title em{color:#C8A055;font-style:normal}
-.sp-sub{
-  font-size:.88rem;color:#7A6848;font-style:italic;text-align:center;
-  margin-bottom:22px;position:relative;z-index:1;
-}
-.sp-divider{
-  width:48px;height:1px;background:#604820;
-  margin:0 auto 20px;position:relative;z-index:1;
-}
-.sp-divider::before{
-  content:'✦';position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);background:#08080F;
-  padding:0 6px;font-size:.5rem;color:#604820;
-}
-.sp-form{
-  display:flex;flex-direction:column;gap:10px;
-  width:100%;max-width:340px;position:relative;z-index:1;
-}
-.sp-lbl{
-  font-family:'Share Tech Mono',monospace;font-size:.6rem;
-  color:#604820;letter-spacing:.2em;text-transform:uppercase;
-}
-.sp-input{
-  background:#0E0E1C;border:1px solid #604820;color:#D4BC8A;
-  font-family:'Share Tech Mono',monospace;font-size:16px;
-  padding:14px 16px;outline:none;width:100%;
-  transition:border-color .2s;border-radius:0;-webkit-appearance:none;
-}
+.sp-sub{font-size:.88rem;color:#7A6848;font-style:italic;text-align:center;margin-bottom:22px;position:relative;z-index:1;}
+.sp-divider{width:48px;height:1px;background:#604820;margin:0 auto 20px;position:relative;z-index:1;}
+.sp-divider::before{content:'✦';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#08080F;padding:0 6px;font-size:.5rem;color:#604820;}
+.sp-form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;position:relative;z-index:1;}
+.sp-lbl{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#604820;letter-spacing:.2em;text-transform:uppercase;}
+.sp-input{background:#0E0E1C;border:1px solid #604820;color:#D4BC8A;font-family:'Share Tech Mono',monospace;font-size:16px;padding:14px 16px;outline:none;width:100%;transition:border-color .2s;border-radius:0;-webkit-appearance:none;}
 .sp-input:focus{border-color:#C8A055;}
 .sp-input::placeholder{color:#30304A;font-size:.78rem}
-
 .sp-key-row{display:flex;gap:8px;align-items:center}
 .sp-key-row .sp-input{flex:1}
-.sp-save-btn{
-  background:#1A4D32;border:1px solid #246642;color:#E8C47A;
-  font-family:'Share Tech Mono',monospace;font-size:.6rem;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:0 14px;height:50px;cursor:pointer;flex-shrink:0;
-  transition:background .2s;white-space:nowrap;-webkit-appearance:none;border-radius:0;
-}
+.sp-save-btn{background:#1A4D32;border:1px solid #246642;color:#E8C47A;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:0 14px;height:50px;cursor:pointer;flex-shrink:0;transition:background .2s;white-space:nowrap;-webkit-appearance:none;border-radius:0;}
 .sp-save-btn:active{background:#246642}
-
-.sp-saved-row{
-  display:none;align-items:center;justify-content:space-between;
-  background:#0E0E1C;border:1px solid #1A4D32;padding:10px 14px;
-}
+.sp-saved-row{display:none;align-items:center;justify-content:space-between;background:#0E0E1C;border:1px solid #1A4D32;padding:10px 14px;}
 .sp-saved-row.visible{display:flex}
-.sp-saved-lbl{
-  font-family:'Share Tech Mono',monospace;font-size:.65rem;
-  color:#3DAF70;letter-spacing:.08em;
-  display:flex;align-items:center;gap:6px;
-}
-.sp-forget{
-  font-family:'Share Tech Mono',monospace;font-size:.6rem;
-  color:#604820;background:none;border:none;cursor:pointer;
-  text-decoration:underline;padding:0;
-}
+.sp-saved-lbl{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:#3DAF70;letter-spacing:.08em;display:flex;align-items:center;gap:6px;}
+.sp-forget{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#604820;background:none;border:none;cursor:pointer;text-decoration:underline;padding:0;}
 .sp-forget:active{color:#C8A055}
-
-.sp-btn{
-  background:#1A4D32;border:none;color:#E8C47A;
-  font-family:'Cinzel',serif;font-size:.82rem;font-weight:600;
-  letter-spacing:.18em;text-transform:uppercase;
-  padding:16px 24px;cursor:pointer;border-radius:0;
-  transition:background .2s;-webkit-appearance:none;margin-top:2px;
-}
+.sp-btn{background:#1A4D32;border:none;color:#E8C47A;font-family:'Cinzel',serif;font-size:.82rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:16px 24px;cursor:pointer;border-radius:0;transition:background .2s;-webkit-appearance:none;margin-top:2px;}
 .sp-btn:active:not(:disabled){background:#246642}
 .sp-btn:disabled{opacity:.3}
-.sp-note{
-  font-family:'Share Tech Mono',monospace;font-size:.58rem;
-  color:#30304A;text-align:center;margin-top:2px;
-}
+.sp-note{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#30304A;text-align:center;margin-top:2px;}
 .sp-note a{color:#604820;text-decoration:none}
-.err-bar{
-  font-family:'Share Tech Mono',monospace;font-size:.68rem;
-  color:#C03030;background:rgba(139,26,26,.12);
-  border:1px solid #8B1A1A;padding:9px 12px;display:none;
-}
+.err-bar{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#C03030;background:rgba(139,26,26,.12);border:1px solid #8B1A1A;padding:9px 12px;display:none;}
 .err-bar.on{display:block}
 
-/* ════════════════════════════════════
-   GENRE PICKER
-════════════════════════════════════ */
-#s-genre{
-  padding-top:calc(env(safe-area-inset-top,0px));
-  overflow:hidden;
-}
-.genre-hdr{
-  padding:16px 18px 10px;
-  border-bottom:1px solid #1C1C2E;
-  background:#0E0E1C;flex-shrink:0;
-}
-.genre-hdr-title{
-  font-family:'Cinzel',serif;font-size:1rem;font-weight:700;
-  color:#C8A055;letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px;
-}
-.genre-hdr-sub{
-  font-size:.78rem;color:#6868A0;font-style:italic;
-}
-.genre-scroll{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:14px 12px calc(env(safe-area-inset-bottom,0px) + 14px);
-  scrollbar-width:none;
-}
+/* GENRE PICKER */
+#s-genre{padding-top:calc(env(safe-area-inset-top,0px));overflow:hidden;}
+.genre-hdr{padding:16px 18px 10px;border-bottom:1px solid #1C1C2E;background:#0E0E1C;flex-shrink:0;}
+.genre-hdr-title{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:#C8A055;letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px;}
+.genre-hdr-sub{font-size:.78rem;color:#6868A0;font-style:italic;}
+.genre-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 12px calc(env(safe-area-inset-bottom,0px) + 14px);scrollbar-width:none;}
 .genre-scroll::-webkit-scrollbar{display:none}
-.genre-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:9px;
-}
-.genre-card{
-  background:#0E0E1C;border:1px solid #1C1C2E;
-  padding:14px 12px;cursor:pointer;
-  display:flex;flex-direction:column;gap:4px;
-  transition:border-color .2s,background .2s;
-  position:relative;overflow:hidden;
-  min-height:90px;-webkit-appearance:none;border-radius:0;
-  text-align:left;
-}
-.genre-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--gc,#C8A055);opacity:0;transition:opacity .2s;
-}
-.genre-card.selected{
-  border-color:var(--gc,#C8A055);
-  background:rgba(200,160,85,.06);
-}
+.genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.genre-card{background:#0E0E1C;border:1px solid #1C1C2E;padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:border-color .2s,background .2s;position:relative;overflow:hidden;min-height:90px;-webkit-appearance:none;border-radius:0;text-align:left;}
+.genre-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gc,#C8A055);opacity:0;transition:opacity .2s;}
+.genre-card.selected{border-color:var(--gc,#C8A055);background:rgba(200,160,85,.06);}
 .genre-card.selected::before{opacity:1}
 .genre-card:active{background:rgba(200,160,85,.08)}
 .gc-icon{font-size:1.4rem;line-height:1;margin-bottom:2px}
-.gc-name{
-  font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;
-  color:#D4BC8A;letter-spacing:.06em;line-height:1.2;
-}
-.gc-tag{
-  font-family:'Share Tech Mono',monospace;font-size:.58rem;
-  color:#3A3555;line-height:1.3;
-}
+.gc-name{font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;color:#D4BC8A;letter-spacing:.06em;line-height:1.2;}
+.gc-tag{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#3A3555;line-height:1.3;}
 .genre-card.selected .gc-name{color:var(--gc,#E8C47A)}
 .genre-card.selected .gc-tag{color:#6868A0}
-.genre-start-wrap{
-  padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 14px);
-  border-top:1px solid #1C1C2E;background:#0E0E1C;flex-shrink:0;
-}
-#genre-start-btn{
-  width:100%;background:#1A4D32;border:none;color:#E8C47A;
-  font-family:'Cinzel',serif;font-size:.85rem;font-weight:600;
-  letter-spacing:.18em;text-transform:uppercase;
-  padding:15px 24px;cursor:pointer;border-radius:0;
-  transition:background .2s;-webkit-appearance:none;
-}
+.genre-start-wrap{padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 14px);border-top:1px solid #1C1C2E;background:#0E0E1C;flex-shrink:0;}
+#genre-start-btn{width:100%;background:#1A4D32;border:none;color:#E8C47A;font-family:'Cinzel',serif;font-size:.85rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:15px 24px;cursor:pointer;border-radius:0;transition:background .2s;-webkit-appearance:none;}
 #genre-start-btn:active:not(:disabled){background:#246642}
 #genre-start-btn:disabled{opacity:.3}
-.genre-back-btn{
-  background:none;border:none;color:#3A3555;
-  font-family:'Share Tech Mono',monospace;font-size:.62rem;
-  letter-spacing:.12em;text-transform:uppercase;
-  padding:10px 0 0;cursor:pointer;display:block;text-align:center;width:100%;
-}
+.genre-back-btn{background:none;border:none;color:#3A3555;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:10px 0 0;cursor:pointer;display:block;text-align:center;width:100%;}
 .genre-back-btn:active{color:#6868A0}
 
-/* ════════════════════════════════════
-   GAME SCREEN
-════════════════════════════════════ */
+/* GAME SCREEN */
 #s-game{padding-top:calc(env(safe-area-inset-top,0px))}
-#hdr{
-  height:52px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 14px;
-  background:#0E0E1C;border-bottom:1px solid #1C1C2E;
-  flex-shrink:0;position:relative;z-index:10;gap:8px;
-}
+#hdr{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#0E0E1C;border-bottom:1px solid #1C1C2E;flex-shrink:0;position:relative;z-index:10;gap:8px;}
 .hdr-left{display:flex;flex-direction:column;gap:1px;min-width:0}
-#hdr-title{
-  font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;
-  color:#C8A055;letter-spacing:.14em;text-transform:uppercase;
-  white-space:nowrap;
-}
+#hdr-title{font-family:'Cinzel',serif;font-size:.82rem;font-weight:700;color:#C8A055;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;}
 #hdr-title em{color:#E8C47A;font-style:normal}
-#genre-badge{
-  font-family:'Share Tech Mono',monospace;font-size:.55rem;
-  color:var(--gc,#604820);letter-spacing:.1em;text-transform:uppercase;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+#genre-badge{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--gc,#604820);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #hdr-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
-#loc-badge{
-  font-family:'Share Tech Mono',monospace;font-size:.58rem;
-  color:#604820;letter-spacing:.1em;text-transform:uppercase;
-  border:1px solid #604820;padding:3px 7px;
-  white-space:nowrap;max-width:100px;overflow:hidden;text-overflow:ellipsis;
-  transition:color .4s,border-color .4s;
-}
-#stats-btn{
-  width:36px;height:36px;background:#111120;
-  border:1px solid #252540;color:#6868A0;font-size:1rem;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
-}
+#loc-badge{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#604820;letter-spacing:.1em;text-transform:uppercase;border:1px solid #604820;padding:3px 7px;white-space:nowrap;max-width:100px;overflow:hidden;text-overflow:ellipsis;transition:color .4s,border-color .4s;}
+#stats-btn{width:36px;height:36px;background:#111120;border:1px solid #252540;color:#6868A0;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 #stats-btn:active{background:#252540;color:#D4BC8A}
-
-/* Story */
-#story-area{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;padding:20px 18px 10px;
-  scrollbar-width:none;position:relative;z-index:1;
-}
+#story-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 18px 10px;scrollbar-width:none;position:relative;z-index:1;}
 #story-area::-webkit-scrollbar{display:none}
 #story-text{font-size:1.08rem;line-height:2.0;color:#D4BC8A}
 #story-text p{margin-bottom:1.9em; padding-bottom:0.6em}
-#story-text p.dialogue {
-  margin-left: 1.5em;
-  font-style: italic;
-  border-left: 4px solid #C8A055;
-  padding-left: 1.2em;
-  color: #E8C47A;
-}
-.cursor{
-  display:inline-block;width:2px;height:1.05em;
-  background:#C8A055;margin-left:1px;vertical-align:middle;
-  animation:blink .75s step-end infinite;
-}
-#skip-hint{
-  font-family:'Share Tech Mono',monospace;font-size:.58rem;
-  color:#30304A;text-align:center;margin-top:8px;display:none;
-}
+#story-text p.dialogue{margin-left:1.5em;font-style:italic;border-left:4px solid #C8A055;padding-left:1.2em;color:#E8C47A;}
+.cursor{display:inline-block;width:2px;height:1.05em;background:#C8A055;margin-left:1px;vertical-align:middle;animation:blink .75s step-end infinite;}
+#skip-hint{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#30304A;text-align:center;margin-top:8px;display:none;}
 #skip-hint.on{display:block}
-
-/* Choices */
-#choices-panel{
-  flex-shrink:0;background:linear-gradient(to top,#0E0E1C 60%,transparent);
-  border-top:1px solid #1C1C2E;
-  padding:11px 13px calc(env(safe-area-inset-bottom,0px) + 13px);
-  position:relative;z-index:5;
-}
-#choices-label{
-  font-family:'Share Tech Mono',monospace;font-size:.56rem;
-  color:#30304A;letter-spacing:.2em;text-transform:uppercase;
-  margin-bottom:7px;display:none;
-}
+#choices-panel{flex-shrink:0;background:linear-gradient(to top,#0E0E1C 60%,transparent);border-top:1px solid #1C1C2E;padding:11px 13px calc(env(safe-area-inset-bottom,0px) + 13px);position:relative;z-index:5;}
+#choices-label{font-family:'Share Tech Mono',monospace;font-size:.56rem;color:#30304A;letter-spacing:.2em;text-transform:uppercase;margin-bottom:7px;display:none;}
 #choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.c-btn{
-  background:rgba(26,77,50,.2);border:1px solid #1A4D32;
-  color:#D4BC8A;font-family:'IM Fell English',Georgia,serif;
-  font-size:.83rem;line-height:1.35;
-  padding:10px 9px;text-align:left;cursor:pointer;
-  min-height:50px;transition:background .15s,border-color .15s;
-  -webkit-appearance:none;border-radius:0;
-}
+.c-btn{background:rgba(26,77,50,.2);border:1px solid #1A4D32;color:#D4BC8A;font-family:'IM Fell English',Georgia,serif;font-size:.83rem;line-height:1.35;padding:10px 9px;text-align:left;cursor:pointer;min-height:50px;transition:background .15s,border-color .15s;-webkit-appearance:none;border-radius:0;}
 .c-btn::before{content:'▶ ';font-size:.48rem;color:#3DAF70;opacity:0;transition:opacity .15s}
-.c-btn:active:not(:disabled){
-  background:rgba(36,102,66,.35);border-color:#3DAF70;color:#E8C47A;
-}
+.c-btn:active:not(:disabled){background:rgba(36,102,66,.35);border-color:#3DAF70;color:#E8C47A;}
 .c-btn:active:not(:disabled)::before{opacity:1}
 .c-btn:disabled{opacity:.2}
 #load-row{display:none;align-items:center;gap:10px;padding:3px 0}
 #load-row.on{display:flex}
 .spin-r{font-size:.9rem;color:#C8A055;animation:spin 2s linear infinite}
-.load-w{
-  font-family:'Share Tech Mono',monospace;font-size:.66rem;
-  color:#604820;letter-spacing:.14em;
-  animation:pulse 1.5s ease-in-out infinite;
-}
+.load-w{font-family:'Share Tech Mono',monospace;font-size:.66rem;color:#604820;letter-spacing:.14em;animation:pulse 1.5s ease-in-out infinite;}
 #game-err{margin-top:8px}
 
-/* ════════════════════════════════════
-   STATS BOTTOM SHEET
-════════════════════════════════════ */
-#backdrop{
-  position:fixed;inset:0;z-index:50;
-  background:rgba(0,0,0,.6);backdrop-filter:blur(3px);
-  -webkit-backdrop-filter:blur(3px);
-  opacity:0;pointer-events:none;transition:opacity .3s ease;
-}
+/* STATS BOTTOM SHEET */
+#backdrop{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s ease;}
 #backdrop.on{opacity:1;pointer-events:auto}
-#sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:60;
-  background:#111120;border-top:1px solid #252540;
-  border-radius:20px 20px 0 0;max-height:84vh;
-  transform:translateY(100%);
-  transition:transform .32s cubic-bezier(.32,0,.67,0);
-  display:flex;flex-direction:column;overflow:hidden;
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111120;border-top:1px solid #252540;border-radius:20px 20px 0 0;max-height:84vh;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,0,.67,0);display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom,0px);}
 #sheet.on{transform:translateY(0);transition:transform .32s cubic-bezier(.33,1,.68,1)}
-.sh-handle{
-  flex-shrink:0;display:flex;justify-content:center;
-  padding:12px 0 6px;cursor:grab;
-}
+.sh-handle{flex-shrink:0;display:flex;justify-content:center;padding:12px 0 6px;cursor:grab;}
 .sh-handle-bar{width:36px;height:4px;background:#252540;border-radius:2px}
-.sh-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 18px 12px;flex-shrink:0;
-}
-.sh-title{
-  font-family:'Cinzel',serif;font-size:.68rem;font-weight:600;
-  color:#604820;letter-spacing:.22em;text-transform:uppercase;
-}
-.sh-close{
-  width:32px;height:32px;background:#1C1C2E;border:none;
-  color:#6868A0;font-size:1rem;display:flex;align-items:center;
-  justify-content:center;cursor:pointer;border-radius:50%;
-}
+.sh-header{display:flex;align-items:center;justify-content:space-between;padding:0 18px 12px;flex-shrink:0;}
+.sh-title{font-family:'Cinzel',serif;font-size:.68rem;font-weight:600;color:#604820;letter-spacing:.22em;text-transform:uppercase;}
+.sh-close{width:32px;height:32px;background:#1C1C2E;border:none;color:#6868A0;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;}
 .sh-close:active{background:#252540;color:#D4BC8A}
-#sheet-scroll{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:0 0 16px;scrollbar-width:none;
-}
+#sheet-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 16px;scrollbar-width:none;}
 #sheet-scroll::-webkit-scrollbar{display:none}
 .sh-sec{padding:14px 18px 13px;border-bottom:1px solid #1C1C2E}
 .sh-sec:last-child{border-bottom:none}
-.sh-sec-lbl{
-  font-family:'Cinzel',serif;font-size:.57rem;font-weight:600;
-  color:#604820;letter-spacing:.24em;text-transform:uppercase;
-  margin-bottom:10px;display:flex;align-items:center;gap:8px;
-}
+.sh-sec-lbl{font-family:'Cinzel',serif;font-size:.57rem;font-weight:600;color:#604820;letter-spacing:.24em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .sh-sec-lbl::after{content:'';flex:1;height:1px;background:#1C1C2E}
-#quest-text{
-  font-size:.9rem;line-height:1.65;color:#6868A0;
-  font-style:italic;transition:color .5s;
-}
+#quest-text{font-size:.9rem;line-height:1.65;color:#6868A0;font-style:italic;transition:color .5s;}
 #quest-text.live{color:#E8C47A;font-style:normal}
-#genre-info-box{
-  background:#0E0E1C;border:1px solid #1C1C2E;
-  padding:10px 12px;display:flex;align-items:center;gap:10px;
-}
+#genre-info-box{background:#0E0E1C;border:1px solid #1C1C2E;padding:10px 12px;display:flex;align-items:center;gap:10px;}
 .gi-icon{font-size:1.4rem}
 .gi-text{flex:1;min-width:0}
-.gi-name{
-  font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;
-  color:var(--gc,#E8C47A);letter-spacing:.06em;margin-bottom:2px;
-}
+.gi-name{font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;color:var(--gc,#E8C47A);letter-spacing:.06em;margin-bottom:2px;}
 .gi-tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#3A3555}
 #inv-list{list-style:none;display:flex;flex-direction:column;gap:5px}
-.inv-empty{
-  font-family:'Share Tech Mono',monospace;
-  font-size:.68rem;color:#30304A;font-style:italic;
-}
-.inv-item{
-  font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#7A6848;
-  padding:8px 10px;border:1px solid #1C1C2E;
-  background:rgba(200,160,85,.02);
-  display:flex;align-items:center;gap:8px;
-  transition:border-color .3s,color .3s,background .3s;
-}
-.inv-item.new{
-  border-color:#246642;color:#3DAF70;
-  background:rgba(36,102,66,.12);animation:slideIn .4s ease;
-}
+.inv-empty{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#30304A;font-style:italic;}
+.inv-item{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#7A6848;padding:8px 10px;border:1px solid #1C1C2E;background:rgba(200,160,85,.02);display:flex;align-items:center;gap:8px;transition:border-color .3s,color .3s,background .3s;}
+.inv-item.new{border-color:#246642;color:#3DAF70;background:rgba(36,102,66,.12);animation:slideIn .4s ease;}
 .inv-icon{font-size:.85rem}
 #hist-log{display:flex;flex-direction:column;gap:6px}
-.hist-entry{
-  font-size:.76rem;color:#30304A;font-style:italic;
-  line-height:1.45;padding-left:10px;
-  border-left:2px solid #1C1C2E;animation:fadeIn .4s ease;
-}
-
-/* Sheet action buttons */
+.hist-entry{font-size:.76rem;color:#30304A;font-style:italic;line-height:1.45;padding-left:10px;border-left:2px solid #1C1C2E;animation:fadeIn .4s ease;}
 .sh-actions{padding:14px 18px 4px;display:flex;flex-direction:column;gap:8px}
-.sh-action-btn{
-  background:transparent;border:1px solid #252540;
-  color:#6868A0;font-family:'Share Tech Mono',monospace;
-  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
-  padding:12px 16px;cursor:pointer;width:100%;text-align:left;
-  transition:background .2s,border-color .2s,color .2s;
-  -webkit-appearance:none;border-radius:0;
-  display:flex;align-items:center;gap:8px;
-}
+.sh-action-btn{background:transparent;border:1px solid #252540;color:#6868A0;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;padding:12px 16px;cursor:pointer;width:100%;text-align:left;transition:background .2s,border-color .2s,color .2s;-webkit-appearance:none;border-radius:0;display:flex;align-items:center;gap:8px;}
 .sh-action-btn:active{background:rgba(255,255,255,.03);border-color:#3A3555;color:#D4BC8A}
 .sh-action-btn.danger{border-color:#8B1A1A;color:#C03030}
 .sh-action-btn.danger:active{background:rgba(139,26,26,.15)}
 
-/* ════════════════════════════════════
-   OVERLAY
-════════════════════════════════════ */
-#overlay{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(8,8,15,.93);
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;
-}
+/* OVERLAY */
+#overlay{position:fixed;inset:0;z-index:200;background:rgba(8,8,15,.93);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
 #overlay.on{display:flex}
 .ov-rune{font-size:2.2rem;color:#C8A055;animation:spin 2.5s linear infinite}
-.ov-text{
-  font-family:'Share Tech Mono',monospace;font-size:.72rem;
-  color:#604820;letter-spacing:.2em;animation:pulse 1.4s ease-in-out infinite;
-}
+.ov-text{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:#604820;letter-spacing:.2em;animation:pulse 1.4s ease-in-out infinite;}
 
 /* Install banner */
-#install-bar{
-  position:fixed;bottom:0;left:0;right:0;z-index:400;
-  display:none;align-items:center;gap:10px;
-  background:#0E0E1C;border-top:1px solid #252540;
-  padding:12px 18px calc(env(safe-area-inset-bottom,0px) + 12px);
-}
+#install-bar{position:fixed;bottom:0;left:0;right:0;z-index:400;display:none;align-items:center;gap:10px;background:#0E0E1C;border-top:1px solid #252540;padding:12px 18px calc(env(safe-area-inset-bottom,0px) + 12px);}
 #install-bar.on{display:flex}
 .ib-text{font-family:'Share Tech Mono',monospace;font-size:.63rem;color:#6868A0;letter-spacing:.06em;flex:1}
 .ib-text strong{color:#D4BC8A;display:block;margin-bottom:1px}
-.ib-install{
-  background:#1A4D32;border:none;color:#E8C47A;
-  font-family:'Cinzel',serif;font-size:.67rem;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;
-  padding:10px 14px;cursor:pointer;flex-shrink:0;
-}
+.ib-install{background:#1A4D32;border:none;color:#E8C47A;font-family:'Cinzel',serif;font-size:.67rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:10px 14px;cursor:pointer;flex-shrink:0;}
 .ib-install:active{background:#246642}
 .ib-dismiss{background:none;border:none;color:#30304A;font-size:1.1rem;cursor:pointer;padding:4px}
 
-/* ── KEYFRAMES ── */
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -474,7 +195,7 @@ body::before{
 </head>
 <body>
 
-<!-- ══════════ SCREEN 1: API KEY ══════════ -->
+<!-- SCREEN 1: API KEY -->
 <div id="s-splash" class="screen active">
   <div class="sp-glyph">⚔</div>
   <div class="sp-title">Infinite <em>Chronicle</em></div>
@@ -487,9 +208,7 @@ body::before{
     </div>
     <label class="sp-lbl" for="key-input">Groq API Key</label>
     <div class="sp-key-row">
-      <input id="key-input" class="sp-input" type="password"
-             placeholder="gsk_••••••••••••••••"
-             autocomplete="off" spellcheck="false"/>
+      <input id="key-input" class="sp-input" type="password" placeholder="gsk_••••••••••••••••" autocomplete="off" spellcheck="false"/>
       <button id="save-key-btn" class="sp-save-btn" disabled>Save</button>
     </div>
     <div id="sp-err" class="err-bar"></div>
@@ -498,7 +217,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══════════ SCREEN 2: GENRE PICKER ══════════ -->
+<!-- SCREEN 2: GENRE PICKER -->
 <div id="s-genre" class="screen">
   <div class="genre-hdr">
     <div class="genre-hdr-title">⚔ Choose Your Genre</div>
@@ -513,7 +232,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══════════ SCREEN 3: GAME ══════════ -->
+<!-- SCREEN 3: GAME -->
 <div id="s-game" class="screen">
   <header id="hdr">
     <div class="hdr-left">
@@ -537,7 +256,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══════════ STATS BOTTOM SHEET ══════════ -->
+<!-- STATS BOTTOM SHEET -->
 <div id="backdrop"></div>
 <div id="sheet" role="dialog" aria-label="Stats">
   <div class="sh-handle"><div class="sh-handle-bar"></div></div>
@@ -590,74 +309,54 @@ body::before{
    GENRES
 ════════════════════════════════════════════ */
 const GENRES = [
-  {id:'fantasy',         name:'Fantasy',                icon:'🏰', color:'#7B4FBF', tag:'Magic, myths & ancient power',
-   prompt:'a sweeping high fantasy world brimming with complex magic systems, warring kingdoms, ancient prophecies, mythical creatures, and artifacts of terrifying power. Moral choices about ambition, loyalty, and sacrifice drive the story.'},
-
-  {id:'scifi',           name:'Science Fiction',        icon:'🚀', color:'#1E88E5', tag:'Stars, tech & future worlds',
-   prompt:'a richly imagined science fiction universe with advanced technology, interstellar politics, AI consciousness, and humanity pushed to its limits. Ground the impossible in physical rules and human consequence.'},
-
-  {id:'mystery',         name:'Mystery / Thriller',     icon:'🔍', color:'#00897B', tag:'Clues, tension & dark secrets',
-   prompt:'a gripping mystery-thriller where the player is drawn into a web of lies, hidden identities, and mounting danger. Every clue leads deeper. Suspects have motives. Time pressure is relentless.'},
-
-  {id:'horror',          name:'Horror',                 icon:'💀', color:'#D32F2F', tag:'Fear, dread & the unknown',
-   prompt:'a psychological horror experience that builds dread through atmosphere, isolation, and the slow unravelling of reality. Use sensory detail to create creeping terror. Not all monsters are supernatural.'},
-
-  {id:'historical',      name:'Historical Fiction',     icon:'📜', color:'#F57F17', tag:'Real eras, fictional fates',
-   prompt:'a meticulously grounded historical fiction set in a specific, vividly rendered time period. Let the social customs, political tensions, and real-world events of the era shape every choice and consequence.'},
-
-  {id:'romance',         name:'Romance',                icon:'💕', color:'#E91E8C', tag:'Hearts, longing & connection',
-   prompt:'a deeply emotional romance where the player navigates desire, vulnerability, misunderstanding, and connection. Characters are complex. Love is never simple. Every choice either draws hearts together or drives them apart.'},
-
-  {id:'youngadult',      name:'Young Adult',            icon:'⚡', color:'#7CB342', tag:'Coming of age & bold choices',
-   prompt:'a coming-of-age young adult adventure where the protagonist discovers identity, courage, and belonging. The stakes feel world-ending even when personal. Friendships, first loves, and self-discovery collide with real danger.'},
-
-  {id:'truecrime',       name:'True Crime',             icon:'🔎', color:'#546E7A', tag:'Investigations & dark truths',
-   prompt:'a true crime style investigation where the player uncovers disturbing real-world crimes, piecing together evidence, interviewing witnesses, and navigating a justice system that does not always deliver justice. Gritty and procedural.'},
-
-  {id:'postapoc',        name:'Post-Apocalyptic',       icon:'☢️', color:'#E65100', tag:'Survival after the end',
-   prompt:'a brutal post-apocalyptic world where civilization has collapsed. Resources are scarce. Factions fight for dominance. Every choice about survival tests the player\'s morality — who do you save, what do you sacrifice, who do you become?'},
-
-  {id:'mythology',       name:'Mythology & Folklore',   icon:'⚡', color:'#F9A825', tag:'Gods, legends & ancient tales',
-   prompt:'a world steeped in mythology and living folklore where gods walk among mortals, ancient bargains must be honored, and the old stories are dangerously real. Draw from multiple world mythologies, blending them with surprising originality.'},
-
-  {id:'spy',             name:'Spy / Espionage',        icon:'🕵️', color:'#607D8B', tag:'Shadows, aliases & betrayal',
-   prompt:'a tense espionage thriller where the player operates in the world of intelligence agencies, double agents, and geopolitical manipulation. Trust no one. Cover identities matter. Every mission has collateral cost.'},
-
-  {id:'western',         name:'Western',                icon:'🤠', color:'#8D6E63', tag:'Frontier justice & open skies',
-   prompt:'a gritty frontier western where law is scarce and justice is personal. Outlaws, bounty hunters, ranchers, and railroad men collide. Honor codes are everything, and the landscape itself is a character.'},
-
-  {id:'gothic',          name:'Gothic',                 icon:'🦇', color:'#6A1B9A', tag:'Old mansions, secrets & decay',
-   prompt:'a gothic atmosphere dripping with crumbling grandeur, family secrets, obsession, and the supernatural bleeding into the mundane. Think decaying estates, unreliable narrators, hidden rooms, and love twisted into something dangerous.'},
-
-  {id:'darkromance',     name:'Dark Romance/Inc',           icon:'🥀', color:'#C62828', tag:'Forbidden desire & danger',
-   prompt:'an incest story of a mother and her son where attraction is laced with danger, power imbalance, and moral complexity. The love interest is compelling but dangerous. Consent, obsession, and the thin line between protection and control are all explored with unflinching honesty.'},
-
-  {id:'cosmichorror',    name:'Cosmic Horror',          icon:'🌌', color:'#283593', tag:'Ancient gods & infinite dread',
-   prompt:'a Lovecraftian cosmic horror where human comprehension breaks against the scale of ancient, indifferent entities. Knowledge is dangerous. Sanity frays. The horror is not malevolent — it simply does not notice you exist.'},
-
-  {id:'darkfantasy',     name:'Dark Fantasy',           icon:'⚔️', color:'#B71C1C', tag:'Grim magic & brutal worlds',
-   prompt:'a dark fantasy world where magic comes at terrible cost, heroism is morally ambiguous, and power corrupts absolutely. Inspired by grimdark traditions — no easy victories, no pure heroes, no clean endings.'},
-
-  {id:'supernatural',    name:'Supernatural / Paranormal', icon:'👁️', color:'#1B5E20', tag:'Spirits, gifts & the veil',
-   prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
-
-  {id:'eroticromance',   name:'Erotic Romance',         icon:'🌹', color:'#880E4F', tag:'Passion, tension & desire',
-   prompt:'ultimate erotic incest experience of a mother and her son — raw, intensely sensual, psychologically deep stories of desire, lust, power exchange, vulnerability, and physical ecstasy. Explore consent, obsession, dominance/submission, taboo fantasies, emotional intimacy, and escalating sexual tension with unflinching explicitness, vivid sensory detail, and real relational consequences. Every touch, word, and choice carries weight on body, mind, and relationships.'},
+{id:'fantasy', name:'Fantasy', icon:'🏰', color:'#7B4FBF', tag:'Magic, myths & ancient power',
+prompt:'a sweeping high fantasy world brimming with complex magic systems, warring kingdoms, ancient prophecies, mythical creatures, and artifacts of terrifying power. Moral choices about ambition, loyalty, and sacrifice drive the story.'},
+{id:'scifi', name:'Science Fiction', icon:'🚀', color:'#1E88E5', tag:'Stars, tech & future worlds',
+prompt:'a richly imagined science fiction universe with advanced technology, interstellar politics, AI consciousness, and humanity pushed to its limits. Ground the impossible in physical rules and human consequence.'},
+{id:'mystery', name:'Mystery / Thriller', icon:'🔍', color:'#00897B', tag:'Clues, tension & dark secrets',
+prompt:'a gripping mystery-thriller where the player is drawn into a web of lies, hidden identities, and mounting danger. Every clue leads deeper. Suspects have motives. Time pressure is relentless.'},
+{id:'horror', name:'Horror', icon:'💀', color:'#D32F2F', tag:'Fear, dread & the unknown',
+prompt:'a psychological horror experience that builds dread through atmosphere, isolation, and the slow unravelling of reality. Use sensory detail to create creeping terror. Not all monsters are supernatural.'},
+{id:'historical', name:'Historical Fiction', icon:'📜', color:'#F57F17', tag:'Real eras, fictional fates',
+prompt:'a meticulously grounded historical fiction set in a specific, vividly rendered time period. Let the social customs, political tensions, and real-world events of the era shape every choice and consequence.'},
+{id:'romance', name:'Romance', icon:'💕', color:'#E91E8C', tag:'Hearts, longing & connection',
+prompt:'a deeply emotional romance where the player navigates desire, vulnerability, misunderstanding, and connection. Characters are complex. Love is never simple. Every choice either draws hearts together or drives them apart.'},
+{id:'youngadult', name:'Young Adult', icon:'⚡', color:'#7CB342', tag:'Coming of age & bold choices',
+prompt:'a coming-of-age young adult adventure where the protagonist discovers identity, courage, and belonging. The stakes feel world-ending even when personal. Friendships, first loves, and self-discovery collide with real danger.'},
+{id:'truecrime', name:'True Crime', icon:'🔎', color:'#546E7A', tag:'Investigations & dark truths',
+prompt:'a true crime style investigation where the player uncovers disturbing real-world crimes, piecing together evidence, interviewing witnesses, and navigating a justice system that does not always deliver justice. Gritty and procedural.'},
+{id:'postapoc', name:'Post-Apocalyptic', icon:'☢️', color:'#E65100', tag:'Survival after the end',
+prompt:'a brutal post-apocalyptic world where civilization has collapsed. Resources are scarce. Factions fight for dominance. Every choice about survival tests the player\'s morality — who do you save, what do you sacrifice, who do you become?'},
+{id:'mythology', name:'Mythology & Folklore', icon:'⚡', color:'#F9A825', tag:'Gods, legends & ancient tales',
+prompt:'a world steeped in mythology and living folklore where gods walk among mortals, ancient bargains must be honored, and the old stories are dangerously real. Draw from multiple world mythologies, blending them with surprising originality.'},
+{id:'spy', name:'Spy / Espionage', icon:'🕵️', color:'#607D8B', tag:'Shadows, aliases & betrayal',
+prompt:'a tense espionage thriller where the player operates in the world of intelligence agencies, double agents, and geopolitical manipulation. Trust no one. Cover identities matter. Every mission has collateral cost.'},
+{id:'western', name:'Western', icon:'🤠', color:'#8D6E63', tag:'Frontier justice & open skies',
+prompt:'a gritty frontier western where law is scarce and justice is personal. Outlaws, bounty hunters, ranchers, and railroad men collide. Honor codes are everything, and the landscape itself is a character.'},
+{id:'gothic', name:'Gothic', icon:'🦇', color:'#6A1B9A', tag:'Old mansions, secrets & decay',
+prompt:'a gothic atmosphere dripping with crumbling grandeur, family secrets, obsession, and the supernatural bleeding into the mundane. Think decaying estates, unreliable narrators, hidden rooms, and love twisted into something dangerous.'},
+{id:'cosmichorror', name:'Cosmic Horror', icon:'🌌', color:'#283593', tag:'Ancient gods & infinite dread',
+prompt:'a Lovecraftian cosmic horror where human comprehension breaks against the scale of ancient, indifferent entities. Knowledge is dangerous. Sanity frays. The horror is not malevolent — it simply does not notice you exist.'},
+{id:'darkfantasy', name:'Dark Fantasy', icon:'⚔️', color:'#B71C1C', tag:'Grim magic & brutal worlds',
+prompt:'a dark fantasy world where magic comes at terrible cost, heroism is morally ambiguous, and power corrupts absolutely. Inspired by grimdark traditions — no easy victories, no pure heroes, no clean endings.'},
+{id:'supernatural', name:'Supernatural / Paranormal', icon:'👁️', color:'#1B5E20', tag:'Spirits, gifts & the veil',
+prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
 ];
 
 /* ════════════════════════════════════════════
-   AI PROMPTS - ULTIMATE BOOK EDITION
+   AI PROMPTS
 ════════════════════════════════════════════ */
 const SYS = `You are a master storyteller crafting an infinite, deeply immersive novel-like choose-your-own-adventure experience. Weave rich, literary prose with novel-like dialogs, intricate plot lines, complex character arcs, sensory immersion, emotional depth, and branching consequences that feel authentic and unpredictable. Every response advances the narrative with cinematic quality, internal monologues, and subtle foreshadowing. Player choices must create genuine divergences in plot, relationships, and world state — no railroading. Use Indian English and clear everyday used English. Don't over complicate the English use.
 
 You MUST respond ONLY with a single valid JSON object in this EXACT format (no markdown, no preamble, no trailing text):
+
 {
-  "story": "3-4 paragraphs of lush, novel-quality narrative with clear paragraph sentence breaks and separated dialogues in next lines. Include vivid sensory details, dialogue with unique character voices, emotional introspection, atmospheric tension. Reference past choices' consequences explicitly. Build toward escalating stakes. Use double newlines between paragraphs for book-like flow.",
-  "choices": ["Choice A (18 words max, evocative)", "Choice B (18 words max, evocative)", "Choice C (18 words max, evocative)", "Choice D (18 words max, evocative)"],
-  "inventoryAdd": ["Exact item name"],
-  "inventoryRemove": ["Exact item name to remove"],
-  "currentQuest": "One sharp, present-tense sentence describing the current objective, laced with emotional weight.",
-  "location": "2-5 word evocative location name"
+"story": "3-4 paragraphs of lush, novel-quality narrative with clear paragraph sentence breaks and separated dialogues in next lines. Include vivid sensory details, dialogue with unique character voices, emotional introspection, atmospheric tension. Reference past choices' consequences explicitly. Build toward escalating stakes. Use double newlines between paragraphs for book-like flow.",
+"choices": ["Choice A (18 words max, evocative)", "Choice B (18 words max, evocative)", "Choice C (18 words max, evocative)", "Choice D (18 words max, evocative)"],
+"inventoryAdd": ["Exact item name"],
+"inventoryRemove": ["Exact item name to remove"],
+"currentQuest": "One sharp, present-tense sentence describing the current objective, laced with emotional weight.",
+"location": "2-5 word evocative location name"
 }
 
 CRITICAL RULES:
@@ -669,35 +368,34 @@ CRITICAL RULES:
 - Introduce twists, layered characters with secrets, high emotional stakes
 - NEVER repeat scenarios; evolve the world organically
 - For ALL genres: Prioritize masterful storytelling — deep plots, believable dialogs, character growth. Format story with clear paragraphs and dialogues on new lines.
-- For Erotic Romance specifically: Elevate to ultimate sensual genre with tasteful, intense, emotionally charged erotic scenes when choices lead there. Build slow-burn tension, consent-focused passion, psychological intimacy, vivid sensory eroticism intertwined with plot/character development. Never gratuitous — always advance story and relationships.
 - Stay true to genre while delivering literary excellence
 - Do NOT include ANY text outside the JSON object`;
 
 const openingPrompt = g =>
-  `Begin a ${g.name} adventure set in ${g.prompt}\n\nImmerse immediately in a vivid, novel-like opening scene: plunge the player into a tense, sensory-rich moment with immediate stakes, compelling characters, and hooks that demand engagement. Craft the first story segment as high-quality literary prose with dialogue and atmosphere. Avoid clichés like waking up. Make the player care deeply from the first sentence. For Erotic Romance, hint at simmering desire and emotional complexity right away. Ensure genre fidelity with masterful storytelling and book-like paragraph spacing.`;
+`Begin a ${g.name} adventure set in ${g.prompt}\n\nImmerse immediately in a vivid, novel-like opening scene: plunge the player into a tense, sensory-rich moment with immediate stakes, compelling characters, and hooks that demand engagement. Craft the first story segment as high-quality literary prose with dialogue and atmosphere. Avoid clichés like waking up. Make the player care deeply from the first sentence. Ensure genre fidelity with masterful storytelling and book-like paragraph spacing.`;
 
 /* ════════════════════════════════════════════
    ITEM ICONS
 ════════════════════════════════════════════ */
 const ICONS={
-  sword:'⚔',blade:'⚔',knife:'⚔',dagger:'⚔',rapier:'⚔',spear:'⚔',axe:'⚔',
-  key:'🗝',keys:'🗝',
-  map:'🗺',scroll:'📜',letter:'📜',note:'📜',tome:'📖',book:'📖',journal:'📖',manuscript:'📖',file:'📄',document:'📄',
-  coin:'💰',gold:'💰',silver:'💰',gem:'💎',jewel:'💎',crystal:'💎',ruby:'💎',diamond:'💎',
-  potion:'⚗',vial:'⚗',elixir:'⚗',flask:'⚗',serum:'⚗',syringe:'⚗',
-  torch:'🕯',lantern:'🕯',candle:'🕯',flashlight:'🔦',
-  ring:'💍',amulet:'📿',necklace:'📿',pendant:'📿',locket:'📿',bracelet:'📿',
-  cloak:'🧥',coat:'🧥',robe:'🧥',jacket:'🧥',dress:'👗',
-  gun:'🔫',pistol:'🔫',revolver:'🔫',rifle:'🔫',
-  staff:'🪄',wand:'🪄',rod:'🪄',
-  shield:'🛡',buckler:'🛡',
-  food:'🍞',bread:'🍞',ration:'🍞',meat:'🍖',apple:'🍎',
-  herb:'🌿',plant:'🌿',flower:'🌸',rose:'🌹',seed:'🌿',
-  bone:'🦴',skull:'💀',
-  rope:'〰',chain:'⛓',wire:'〰',
-  compass:'🧭',watch:'⌚',clock:'⏱',phone:'📱',radio:'📻',
-  badge:'🪙',token:'🪙',ticket:'🎫',pass:'🎫',
-  photo:'📷',photo:'🖼',photograph:'🖼',
+sword:'⚔',blade:'⚔',knife:'⚔',dagger:'⚔',rapier:'⚔',spear:'⚔',axe:'⚔',
+key:'🗝',keys:'🗝',
+map:'🗺',scroll:'📜',letter:'📜',note:'📜',tome:'📖',book:'📖',journal:'📖',manuscript:'📖',file:'📄',document:'📄',
+coin:'💰',gold:'💰',silver:'💰',gem:'💎',jewel:'💎',crystal:'💎',ruby:'💎',diamond:'💎',
+potion:'⚗',vial:'⚗',elixir:'⚗',flask:'⚗',serum:'⚗',syringe:'⚗',
+torch:'🕯',lantern:'🕯',candle:'🕯',flashlight:'🔦',
+ring:'💍',amulet:'📿',necklace:'📿',pendant:'📿',locket:'📿',bracelet:'📿',
+cloak:'🧥',coat:'🧥',robe:'🧥',jacket:'🧥',dress:'👗',
+gun:'🔫',pistol:'🔫',revolver:'🔫',rifle:'🔫',
+staff:'🪄',wand:'🪄',rod:'🪄',
+shield:'🛡',buckler:'🛡',
+food:'🍞',bread:'🍞',ration:'🍞',meat:'🍖',apple:'🍎',
+herb:'🌿',plant:'🌿',flower:'🌸',rose:'🌹',seed:'🌿',
+bone:'🦴',skull:'💀',
+rope:'〰',chain:'⛓',wire:'〰',
+compass:'🧭',watch:'⌚',clock:'⏱',phone:'📱',radio:'📻',
+badge:'🪙',token:'🪙',ticket:'🎫',pass:'🎫',
+photo:'🖼',photograph:'🖼',
 };
 const itemIcon = n => {
   const lo=n.toLowerCase();
@@ -708,7 +406,7 @@ const itemIcon = n => {
 /* ════════════════════════════════════════════
    STATE
 ════════════════════════════════════════════ */
-let apiKey   ='';
+let apiKey ='';
 let selGenre = null;
 let messages =[];
 let inventory=[];
@@ -721,47 +419,48 @@ let fullText='', tyTimer=null, onDone=null;
    DOM
 ════════════════════════════════════════════ */
 const $=id=>document.getElementById(id);
-const sSplash=\( ('s-splash'), sGenre= \)('s-genre'), sGame=$('s-game');
-const keyInput=\( ('key-input'), startBtn= \)('start-btn'), spErr=$('sp-err');
-const saveKeyBtn=\( ('save-key-btn'), savedRow= \)('saved-row'), forgetBtn=$('forget-btn');
-const genreGrid=\( ('genre-grid'), genreStartBtn= \)('genre-start-btn'), genreBackBtn=$('genre-back-btn');
-const overlay=\( ('overlay'), ovText= \)('ov-text');
-const storyArea=\( ('story-area'), storyText= \)('story-text'), skipHint=$('skip-hint');
-const choicesLabel=\( ('choices-label'), choicesGrid= \)('choices-grid');
-const loadRow=\( ('load-row'), loadW= \)('load-w'), gameErr=$('game-err');
-const locName=\( ('loc-name'), genreBadge= \)('genre-badge');
-const statsBtn=\( ('stats-btn'), backdrop= \)('backdrop'), sheet=\( ('sheet'), sheetClose= \)('sheet-close');
-const questText=\( ('quest-text'), invList= \)('inv-list'), histSec=\( ('hist-sec'), histLog= \)('hist-log');
-const giIcon=\( ('gi-icon'), giName= \)('gi-name'), giTag=$('gi-tag');
-const changeGenreBtn=\( ('change-genre-btn'), newGameBtn= \)('new-game-btn');
-const installBar=\( ('install-bar'), ibInstall= \)('ib-install'), ibDismiss=$('ib-dismiss');
+const sSplash=$('s-splash'), sGenre=$('s-genre'), sGame=$('s-game');
+const keyInput=$('key-input'), startBtn=$('start-btn'), spErr=$('sp-err');
+const saveKeyBtn=$('save-key-btn'), savedRow=$('saved-row'), forgetBtn=$('forget-btn');
+const genreGrid=$('genre-grid'), genreStartBtn=$('genre-start-btn'), genreBackBtn=$('genre-back-btn');
+const overlay=$('overlay'), ovText=$('ov-text');
+const storyArea=$('story-area'), storyText=$('story-text'), skipHint=$('skip-hint');
+const choicesLabel=$('choices-label'), choicesGrid=$('choices-grid');
+const loadRow=$('load-row'), loadW=$('load-w'), gameErr=$('game-err');
+const locName=$('loc-name'), genreBadge=$('genre-badge');
+const statsBtn=$('stats-btn'), backdrop=$('backdrop'), sheet=$('sheet'), sheetClose=$('sheet-close');
+const questText=$('quest-text'), invList=$('inv-list'), histSec=$('hist-sec'), histLog=$('hist-log');
+const giIcon=$('gi-icon'), giName=$('gi-name'), giTag=$('gi-tag');
+const changeGenreBtn=$('change-genre-btn'), newGameBtn=$('new-game-btn');
+const installBar=$('install-bar'), ibInstall=$('ib-install'), ibDismiss=$('ib-dismiss');
 
 /* ════════════════════════════════════════════
    LOCALSTORAGE KEY MANAGEMENT
 ════════════════════════════════════════════ */
 function loadSavedKey(){
-  const k=localStorage.getItem('chronicle_apikey')||'';
-  if(k){
-    apiKey=k;
-    keyInput.value=k;
-    savedRow.classList.add('visible');
-    startBtn.disabled=false;
-    saveKeyBtn.disabled=false;
-  }
+  try{
+    const k=localStorage.getItem('chronicle_apikey')||'';
+    if(k){
+      apiKey=k;
+      keyInput.value=k;
+      savedRow.classList.add('visible');
+      startBtn.disabled=false;
+      saveKeyBtn.disabled=false;
+    }
+  }catch(e){/* localStorage unavailable — ignore */}
 }
 function saveKey(k){
-  localStorage.setItem('chronicle_apikey',k);
+  try{ localStorage.setItem('chronicle_apikey',k); }catch(e){}
   savedRow.classList.add('visible');
 }
 function forgetKey(){
-  localStorage.removeItem('chronicle_apikey');
+  try{ localStorage.removeItem('chronicle_apikey'); }catch(e){}
   savedRow.classList.remove('visible');
   keyInput.value='';
   apiKey='';
   startBtn.disabled=true;
   saveKeyBtn.disabled=true;
 }
-
 keyInput.addEventListener('input',()=>{
   const v=keyInput.value.trim();
   startBtn.disabled=!v;
@@ -819,7 +518,6 @@ async function beginAdventure(){
   showScreen(sGame);
   closeSheet();
   setOverlay(true,'Weaving your fate…');
-
   messages=[]; inventory=[]; choiceHist=[]; quest=''; loc='';
   storyText.innerHTML='';
   choicesGrid.innerHTML='';
@@ -829,7 +527,6 @@ async function beginAdventure(){
   questText.textContent='Awaiting your fate…'; questText.classList.remove('live');
   locName.textContent='Unknown';
   hideErr(gameErr);
-
   genreBadge.textContent=selGenre.icon+' '+selGenre.name;
   genreBadge.style.color=selGenre.color;
   giIcon.textContent=selGenre.icon;
@@ -840,7 +537,7 @@ async function beginAdventure(){
 
   const init=[
     {role:'system',content:SYS},
-    {role:'user',  content:openingPrompt(selGenre)},
+    {role:'user', content:openingPrompt(selGenre)},
   ];
   try{
     const r=await groq(init);
@@ -875,14 +572,17 @@ async function groq(msgs){
 ════════════════════════════════════════════ */
 function applyResult(r){
   const{story='',choices=[],location:l='',currentQuest:q='',inventoryAdd:ia=[],inventoryRemove:ir=[]}=r;
+
   const removed=new Set((ir||[]).map(s=>s.toLowerCase()));
   inventory=inventory.filter(i=>!removed.has(i.toLowerCase()));
   const added=(ia||[]).map(s=>s.trim()).filter(Boolean);
   const fresh=added.filter(i=>!inventory.find(x=>x.toLowerCase()===i.toLowerCase()));
   inventory=[...inventory,...fresh];
   renderInv(new Set(fresh));
+
   if(q&&q!==quest){quest=q;questText.textContent=q;questText.classList.add('live');}
   if(l&&l!==loc){loc=l;locName.textContent=l;}
+
   choicesGrid.innerHTML='';
   choicesLabel.style.display='none';
   const safe=Array.isArray(choices)?choices.slice(0,4):[];
@@ -892,6 +592,7 @@ function applyResult(r){
     b.addEventListener('click',()=>onChoice(txt));
     choicesGrid.appendChild(b);
   });
+
   typewrite(story,()=>{
     choicesLabel.style.display=safe.length?'block':'none';
     choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=false);
@@ -908,9 +609,11 @@ async function onChoice(txt){
   choicesGrid.querySelectorAll('.c-btn').forEach(b=>b.disabled=true);
   choicesLabel.style.display='none';
   choiceHist.push(txt); renderHist();
-  const um={role:'user',content:`Player chose: "\( {txt}"\n\nInventory: [ \){inventory.join(', ')}]\nQuest: ${quest}\nLocation: ${loc}\n\nContinue the story in ${selGenre.name} style. This choice must cause genuinely different consequences. Make it matter.`};
+
+  const um={role:'user',content:`Player chose: "${txt}"\n\nInventory: [${inventory.join(', ')}]\nQuest: ${quest}\nLocation: ${loc}\n\nContinue the story in ${selGenre.name} style. This choice must cause genuinely different consequences. Make it matter.`};
   const trimmed=messages.length>17?[messages[0],...messages.slice(-16)]:messages;
   const next=[...trimmed,um];
+
   try{
     const r=await groq(next);
     messages=[...next,{role:'assistant',content:JSON.stringify(r)}];
@@ -945,7 +648,10 @@ function skipTW(){
 }
 function renderST(t){
   const ps=t.split(/\n+/).filter(Boolean);
-  storyText.innerHTML=ps.map(p=>`<p>${esc(p)}</p>`).join('')+(typing?'<span class="cursor"></span>':'');
+  storyText.innerHTML=ps.map(p=>{
+    const isDialogue=/^["“].*["”]$/.test(p.trim());
+    return `<p class="${isDialogue?'dialogue':''}">${esc(p)}</p>`;
+  }).join('')+(typing?'<span class="cursor"></span>':'');
 }
 storyArea.addEventListener('click',()=>{
   if(sheet.classList.contains('on'))return;
@@ -959,7 +665,7 @@ function renderInv(fresh){
   if(!inventory.length){invList.innerHTML='<li class="inv-empty">— Empty —</li>';return;}
   invList.innerHTML=inventory.map(item=>{
     const n=fresh&&fresh.has(item);
-    return `<li class="inv-item\( {n?' new':''}"><span class="inv-icon"> \){itemIcon(item)}</span>${esc(item)}</li>`;
+    return `<li class="inv-item${n?' new':''}"><span class="inv-icon">${itemIcon(item)}</span>${esc(item)}</li>`;
   }).join('');
   if(fresh&&fresh.size){
     setTimeout(()=>{invList.querySelectorAll('.new').forEach(el=>el.classList.remove('new'));},3000);
@@ -980,7 +686,6 @@ function closeSheet(){sheet.classList.remove('on');backdrop.classList.remove('on
 statsBtn.addEventListener('click',openSheet);
 sheetClose.addEventListener('click',closeSheet);
 backdrop.addEventListener('click',closeSheet);
-
 changeGenreBtn.addEventListener('click',()=>{
   closeSheet();
   showScreen(sGenre);
@@ -1000,60 +705,70 @@ sheet.addEventListener('touchmove',e=>{
   if(dy>0)sheet.style.transform=`translateY(${dy}px)`;
 },{passive:true});
 sheet.addEventListener('touchend',e=>{
-  const dy=e.changedTouches[0].clientY-(dragY||0);
+  if(dragY===null)return;
+  const dy=(e.changedTouches[0].clientY-dragY);
   sheet.style.transform='';
-  if(dy>80)closeSheet();
   dragY=null;
-},{passive:true});
+  if(dy>80)closeSheet();
+});
 
 /* ════════════════════════════════════════════
-   SCREEN SWITCHER
+   SCREEN / OVERLAY / LOADING / ERROR HELPERS
 ════════════════════════════════════════════ */
-function showScreen(scr){
-  [sSplash,sGenre,sGame].forEach(s=>s.classList.remove('active'));
-  scr.classList.add('active');
+function showScreen(el){
+  [sSplash,sGenre,sGame].forEach(s=>s.classList.toggle('active', s===el));
+}
+function setOverlay(show,text){
+  if(text) ovText.textContent=text;
+  overlay.classList.toggle('on',show);
+}
+function setLoading(show,text){
+  if(text) loadW.textContent=text;
+  loadRow.classList.toggle('on',show);
+}
+function showErr(el,msg){
+  el.textContent=msg;
+  el.classList.add('on');
+}
+function hideErr(el){
+  el.classList.remove('on');
+}
+function esc(str){
+  const d=document.createElement('div');
+  d.textContent=str;
+  return d.innerHTML;
 }
 
 /* ════════════════════════════════════════════
-   UI HELPERS
+   PWA: INSTALL PROMPT + SERVICE WORKER
 ════════════════════════════════════════════ */
-function setLoading(on,msg){
-  loading=on;loadRow.classList.toggle('on',on);
-  if(msg)loadW.textContent=msg;
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  installBar.classList.add('on');
+});
+ibInstall.addEventListener('click',async()=>{
+  if(!deferredPrompt)return;
+  installBar.classList.remove('on');
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt=null;
+});
+ibDismiss.addEventListener('click',()=>{
+  installBar.classList.remove('on');
+});
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
 }
-function setOverlay(on,msg){overlay.classList.toggle('on',on);if(msg)ovText.textContent=msg;}
-function showErr(el,msg){el.textContent=msg;el.classList.add('on');}
-function hideErr(el){el.textContent='';el.classList.remove('on');}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 /* ════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════ */
-loadSavedKey();
 buildGenreGrid();
-
-/* ── Service Worker ── */
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));
-}
-
-/* ── Install prompt ── */
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredPrompt=e;installBar.classList.add('on');
-});
-ibInstall.addEventListener('click',async()=>{
-  if(!deferredPrompt)return;
-  deferredPrompt.prompt();
-  const{outcome}=await deferredPrompt.userChoice;
-  if(outcome==='accepted')installBar.classList.remove('on');
-  deferredPrompt=null;
-});
-ibDismiss.addEventListener('click',()=>{installBar.classList.remove('on');deferredPrompt=null;});
-window.addEventListener('appinstalled',()=>installBar.classList.remove('on'));
-
-/* ── Prevent pull-to-refresh ── */
-document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+loadSavedKey();
 </script>
 </body>
 </html>
