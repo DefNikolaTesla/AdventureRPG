@@ -578,14 +578,29 @@ async function groq(msgs){
   const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,temperature:0.93,max_tokens:2200}),
+    body:JSON.stringify({
+      model:'llama-3.3-70b-versatile',
+      messages:msgs,
+      temperature:0.93,
+      max_tokens:2200,
+      response_format:{type:'json_object'}
+    }),
   });
   if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d?.error?.message||'HTTP '+res.status);}
   const d=await res.json();
   const raw=d?.choices?.[0]?.message?.content||'';
   const m=raw.match(/\{[\s\S]*\}/);
   if(!m)throw new Error('Unexpected response — please try again.');
-  return JSON.parse(m[0]);
+
+  // Clean bad control characters that break JSON.parse
+  let jsonStr = m[0]
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')  // remove most control chars
+    .replace(/\r\n/g, '\\n')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\n')
+    .replace(/\t/g, '\\t');
+
+  return JSON.parse(jsonStr);
 }
 
 /* ════════════════════════════════════════════
