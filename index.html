@@ -574,7 +574,7 @@ async function beginAdventure(){
 /* ════════════════════════════════════════════
    GROQ API
 ════════════════════════════════════════════ */
-  async function groq(msgs){
+async function groq(msgs){
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -584,7 +584,7 @@ async function beginAdventure(){
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       messages: msgs,
-      temperature: 0.85,               // slightly lower = more stable JSON
+      temperature: 0.85,
       max_tokens: 2200,
       response_format: { type: 'json_object' }
     }),
@@ -598,7 +598,6 @@ async function beginAdventure(){
   const d = await res.json();
   let raw = d?.choices?.[0]?.message?.content || '';
 
-  // Extract the JSON object
   const start = raw.indexOf('{');
   const end = raw.lastIndexOf('}');
   if (start === -1 || end === -1) {
@@ -607,8 +606,8 @@ async function beginAdventure(){
 
   let jsonStr = raw.slice(start, end + 1);
 
-  // Strong cleaning of control characters
-    jsonStr = jsonStr.replace(/[\x00-\x1f]/g, c => c === '\n' ? '\\n' : c === '\r' ? '' : c === '\t' ? '\\t' : '');
+  // Escape any stray control characters so JSON.parse never chokes
+  jsonStr = jsonStr.replace(/[\x00-\x1f]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 
   try {
     return JSON.parse(jsonStr);
@@ -617,7 +616,6 @@ async function beginAdventure(){
     throw new Error('Failed to generate valid JSON. Please try again.');
   }
 }
-
 /* ════════════════════════════════════════════
    APPLY RESULT
 ════════════════════════════════════════════ */
