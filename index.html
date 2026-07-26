@@ -309,38 +309,59 @@ body::before{
    GENRES
 ════════════════════════════════════════════ */
 const GENRES = [
-{id:'fantasy', name:'Fantasy', icon:'🏰', color:'#7B4FBF', tag:'Magic, myths & ancient power',
-prompt:'a sweeping high fantasy world brimming with complex magic systems, warring kingdoms, ancient prophecies, mythical creatures, and artifacts of terrifying power. Moral choices about ambition, loyalty, and sacrifice drive the story.'},
-{id:'scifi', name:'Science Fiction', icon:'🚀', color:'#1E88E5', tag:'Stars, tech & future worlds',
-prompt:'a richly imagined science fiction universe with advanced technology, interstellar politics, AI consciousness, and humanity pushed to its limits. Ground the impossible in physical rules and human consequence.'},
-{id:'mystery', name:'Mystery / Thriller', icon:'🔍', color:'#00897B', tag:'Clues, tension & dark secrets',
-prompt:'a gripping mystery-thriller where the player is drawn into a web of lies, hidden identities, and mounting danger. Every clue leads deeper. Suspects have motives. Time pressure is relentless.'},
-{id:'horror', name:'Horror', icon:'💀', color:'#D32F2F', tag:'Fear, dread & the unknown',
-prompt:'a psychological horror experience that builds dread through atmosphere, isolation, and the slow unravelling of reality. Use sensory detail to create creeping terror. Not all monsters are supernatural.'},
-{id:'historical', name:'Historical Fiction', icon:'📜', color:'#F57F17', tag:'Real eras, fictional fates',
-prompt:'a meticulously grounded historical fiction set in a specific, vividly rendered time period. Let the social customs, political tensions, and real-world events of the era shape every choice and consequence.'},
-{id:'romance', name:'Romance', icon:'💕', color:'#E91E8C', tag:'Hearts, longing & connection',
-prompt:'a deeply emotional romance where the player navigates desire, vulnerability, misunderstanding, and connection. Characters are complex. Love is never simple. Every choice either draws hearts together or drives them apart.'},
-{id:'youngadult', name:'Young Adult', icon:'⚡', color:'#7CB342', tag:'Coming of age & bold choices',
-prompt:'a coming-of-age young adult adventure where the protagonist discovers identity, courage, and belonging. The stakes feel world-ending even when personal. Friendships, first loves, and self-discovery collide with real danger.'},
-{id:'truecrime', name:'True Crime', icon:'🔎', color:'#546E7A', tag:'Investigations & dark truths',
-prompt:'a true crime style investigation where the player uncovers disturbing real-world crimes, piecing together evidence, interviewing witnesses, and navigating a justice system that does not always deliver justice. Gritty and procedural.'},
-{id:'postapoc', name:'Post-Apocalyptic', icon:'☢️', color:'#E65100', tag:'Survival after the end',
-prompt:'a brutal post-apocalyptic world where civilization has collapsed. Resources are scarce. Factions fight for dominance. Every choice about survival tests the player\'s morality — who do you save, what do you sacrifice, who do you become?'},
-{id:'mythology', name:'Mythology & Folklore', icon:'⚡', color:'#F9A825', tag:'Gods, legends & ancient tales',
-prompt:'a world steeped in mythology and living folklore where gods walk among mortals, ancient bargains must be honored, and the old stories are dangerously real. Draw from multiple world mythologies, blending them with surprising originality.'},
-{id:'spy', name:'Spy / Espionage', icon:'🕵️', color:'#607D8B', tag:'Shadows, aliases & betrayal',
-prompt:'a tense espionage thriller where the player operates in the world of intelligence agencies, double agents, and geopolitical manipulation. Trust no one. Cover identities matter. Every mission has collateral cost.'},
-{id:'western', name:'Western', icon:'🤠', color:'#8D6E63', tag:'Frontier justice & open skies',
-prompt:'a gritty frontier western where law is scarce and justice is personal. Outlaws, bounty hunters, ranchers, and railroad men collide. Honor codes are everything, and the landscape itself is a character.'},
-{id:'gothic', name:'Gothic', icon:'🦇', color:'#6A1B9A', tag:'Old mansions, secrets & decay',
-prompt:'a gothic atmosphere dripping with crumbling grandeur, family secrets, obsession, and the supernatural bleeding into the mundane. Think decaying estates, unreliable narrators, hidden rooms, and love twisted into something dangerous.'},
-{id:'cosmichorror', name:'Cosmic Horror', icon:'🌌', color:'#283593', tag:'Ancient gods & infinite dread',
-prompt:'a Lovecraftian cosmic horror where human comprehension breaks against the scale of ancient, indifferent entities. Knowledge is dangerous. Sanity frays. The horror is not malevolent — it simply does not notice you exist.'},
-{id:'darkfantasy', name:'Dark Fantasy', icon:'⚔️', color:'#B71C1C', tag:'Grim magic & brutal worlds',
-prompt:'a dark fantasy world where magic comes at terrible cost, heroism is morally ambiguous, and power corrupts absolutely. Inspired by grimdark traditions — no easy victories, no pure heroes, no clean endings.'},
-{id:'supernatural', name:'Supernatural / Paranormal', icon:'👁️', color:'#1B5E20', tag:'Spirits, gifts & the veil',
-prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
+  {id:'fantasy',         name:'Fantasy',                icon:'🏰', color:'#7B4FBF', tag:'Magic, myths & ancient power',
+   prompt:'a sweeping high fantasy world brimming with complex magic systems, warring kingdoms, ancient prophecies, mythical creatures, and artifacts of terrifying power. Moral choices about ambition, loyalty, and sacrifice drive the story.'},
+
+  {id:'scifi',           name:'Science Fiction',        icon:'🚀', color:'#1E88E5', tag:'Stars, tech & future worlds',
+   prompt:'a richly imagined science fiction universe with advanced technology, interstellar politics, AI consciousness, and humanity pushed to its limits. Ground the impossible in physical rules and human consequence.'},
+
+  {id:'mystery',         name:'Mystery / Thriller',     icon:'🔍', color:'#00897B', tag:'Clues, tension & dark secrets',
+   prompt:'a gripping mystery-thriller where the player is drawn into a web of lies, hidden identities, and mounting danger. Every clue leads deeper. Suspects have motives. Time pressure is relentless.'},
+
+  {id:'horror',          name:'Horror',                 icon:'💀', color:'#D32F2F', tag:'Fear, dread & the unknown',
+   prompt:'a psychological horror experience that builds dread through atmosphere, isolation, and the slow unravelling of reality. Use sensory detail to create creeping terror. Not all monsters are supernatural.'},
+
+  {id:'historical',      name:'Historical Fiction',     icon:'📜', color:'#F57F17', tag:'Real eras, fictional fates',
+   prompt:'a meticulously grounded historical fiction set in a specific, vividly rendered time period. Let the social customs, political tensions, and real-world events of the era shape every choice and consequence.'},
+
+  {id:'romance',         name:'Romance',                icon:'💕', color:'#E91E8C', tag:'Hearts, longing & connection',
+   prompt:'a deeply emotional romance where the player navigates desire, vulnerability, misunderstanding, and connection. Characters are complex. Love is never simple. Every choice either draws hearts together or drives them apart.'},
+
+  {id:'youngadult',      name:'Young Adult',            icon:'⚡', color:'#7CB342', tag:'Coming of age & bold choices',
+   prompt:'a coming-of-age young adult adventure where the protagonist discovers identity, courage, and belonging. The stakes feel world-ending even when personal. Friendships, first loves, and self-discovery collide with real danger.'},
+
+  {id:'truecrime',       name:'True Crime',             icon:'🔎', color:'#546E7A', tag:'Investigations & dark truths',
+   prompt:'a true crime style investigation where the player uncovers disturbing real-world crimes, piecing together evidence, interviewing witnesses, and navigating a justice system that does not always deliver justice. Gritty and procedural.'},
+
+  {id:'postapoc',        name:'Post-Apocalyptic',       icon:'☢️', color:'#E65100', tag:'Survival after the end',
+   prompt:'a brutal post-apocalyptic world where civilization has collapsed. Resources are scarce. Factions fight for dominance. Every choice about survival tests the player\'s morality — who do you save, what do you sacrifice, who do you become?'},
+
+  {id:'mythology',       name:'Mythology & Folklore',   icon:'⚡', color:'#F9A825', tag:'Gods, legends & ancient tales',
+   prompt:'a world steeped in mythology and living folklore where gods walk among mortals, ancient bargains must be honored, and the old stories are dangerously real. Draw from multiple world mythologies, blending them with surprising originality.'},
+
+  {id:'spy',             name:'Spy / Espionage',        icon:'🕵️', color:'#607D8B', tag:'Shadows, aliases & betrayal',
+   prompt:'a tense espionage thriller where the player operates in the world of intelligence agencies, double agents, and geopolitical manipulation. Trust no one. Cover identities matter. Every mission has collateral cost.'},
+
+  {id:'western',         name:'Western',                icon:'🤠', color:'#8D6E63', tag:'Frontier justice & open skies',
+   prompt:'a gritty frontier western where law is scarce and justice is personal. Outlaws, bounty hunters, ranchers, and railroad men collide. Honor codes are everything, and the landscape itself is a character.'},
+
+  {id:'gothic',          name:'Gothic',                 icon:'🦇', color:'#6A1B9A', tag:'Old mansions, secrets & decay',
+   prompt:'a gothic atmosphere dripping with crumbling grandeur, family secrets, obsession, and the supernatural bleeding into the mundane. Think decaying estates, unreliable narrators, hidden rooms, and love twisted into something dangerous.'},
+
+  {id:'darkromance',     name:'Dark Romance/Inc',           icon:'🥀', color:'#C62828', tag:'Forbidden desire & danger',
+   prompt:'an incest story of a mother and her son where attraction is laced with danger, power imbalance, and moral complexity. The love interest is compelling but dangerous. Consent, obsession, and the thin line between protection and control are all explored with unflinching honesty.'},
+
+  {id:'cosmichorror',    name:'Cosmic Horror',          icon:'🌌', color:'#283593', tag:'Ancient gods & infinite dread',
+   prompt:'a Lovecraftian cosmic horror where human comprehension breaks against the scale of ancient, indifferent entities. Knowledge is dangerous. Sanity frays. The horror is not malevolent — it simply does not notice you exist.'},
+
+  {id:'darkfantasy',     name:'Dark Fantasy',           icon:'⚔️', color:'#B71C1C', tag:'Grim magic & brutal worlds',
+   prompt:'a dark fantasy world where magic comes at terrible cost, heroism is morally ambiguous, and power corrupts absolutely. Inspired by grimdark traditions — no easy victories, no pure heroes, no clean endings.'},
+
+  {id:'supernatural',    name:'Supernatural / Paranormal', icon:'👁️', color:'#1B5E20', tag:'Spirits, gifts & the veil',
+   prompt:'a supernatural world where ghosts, psychic abilities, secret bloodlines, and creatures of folklore are real and embedded in everyday life. The veil between worlds is thin, and the player must navigate both realms.'},
+
+  {id:'eroticromance',   name:'Erotic Romance',         icon:'🌹', color:'#880E4F', tag:'Passion, tension & desire',
+   prompt:'ultimate erotic incest experience of a mother and her son — raw, intensely sensual, psychologically deep stories of desire, lust, power exchange, vulnerability, and physical ecstasy. Explore consent, obsession, dominance/submission, taboo fantasies, emotional intimacy, and escalating sexual tension with unflinching explicitness, vivid sensory detail, and real relational consequences. Every touch, word, and choice carries weight on body, mind, and relationships.'},
 ];
 
 /* ════════════════════════════════════════════
