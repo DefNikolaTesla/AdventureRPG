@@ -574,33 +574,54 @@ async function beginAdventure(){
 /* ════════════════════════════════════════════
    GROQ API
 ════════════════════════════════════════════ */
-async function groq(msgs){
-  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-    body:JSON.stringify({
-      model:'llama-3.3-70b-versatile',
-      messages:msgs,
-      temperature:0.93,
-      max_tokens:2200,
-      response_format:{type:'json_object'}
+  async function groq(msgs){
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: msgs,
+      temperature: 0.93,
+      max_tokens: 2200,
+      response_format: { type: 'json_object' }
     }),
   });
-  if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d?.error?.message||'HTTP '+res.status);}
-  const d=await res.json();
-  const raw=d?.choices?.[0]?.message?.content||'';
-  const m=raw.match(/\{[\s\S]*\}/);
-  if(!m)throw new Error('Unexpected response — please try again.');
 
-  // Clean bad control characters that break JSON.parse
-  let jsonStr = m[0]
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')  // remove most control chars
+  if (!res.ok) {
+    const d = await res.json().catch(() => ({}));
+    throw new Error(d?.error?.message || 'HTTP ' + res.status);
+  }
+
+  const d = await res.json();
+  let raw = d?.choices?.[0]?.message?.content || '';
+
+  // Extract JSON object
+  const start = raw.indexOf('{');
+  const end = raw.lastIndexOf('}');
+  if (start === -1 || end === -1) {
+    throw new Error('Unexpected response — please try again.');
+  }
+
+  let jsonStr = raw.slice(start, end + 1);
+
+  // Remove / fix bad control characters
+  jsonStr = jsonStr
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '') // remove illegal control chars
     .replace(/\r\n/g, '\\n')
     .replace(/\n/g, '\\n')
     .replace(/\r/g, '\\n')
     .replace(/\t/g, '\\t');
 
-  return JSON.parse(jsonStr);
+  try {
+    return JSON.parse(jsonStr);
+  } catch (e) {
+    console.error('JSON Parse Error:', e);
+    console.error('Raw content:', raw);
+    throw new Error('Bad control character in string literal — try again');
+  }
 }
 
 /* ════════════════════════════════════════════
