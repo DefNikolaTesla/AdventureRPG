@@ -584,7 +584,7 @@ async function beginAdventure(){
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       messages: msgs,
-      temperature: 0.93,
+      temperature: 0.85,               // slightly lower = more stable JSON
       max_tokens: 2200,
       response_format: { type: 'json_object' }
     }),
@@ -598,29 +598,31 @@ async function beginAdventure(){
   const d = await res.json();
   let raw = d?.choices?.[0]?.message?.content || '';
 
-  // Extract JSON object
+  // Extract the JSON object
   const start = raw.indexOf('{');
   const end = raw.lastIndexOf('}');
   if (start === -1 || end === -1) {
-    throw new Error('Unexpected response — please try again.');
+    throw new Error('No valid JSON found in response');
   }
 
   let jsonStr = raw.slice(start, end + 1);
 
-  // Remove / fix bad control characters
+  // Strong cleaning of control characters
   jsonStr = jsonStr
-    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '') // remove illegal control chars
-    .replace(/\r\n/g, '\\n')
-    .replace(/\n/g, '\\n')
-    .replace(/\r/g, '\\n')
-    .replace(/\t/g, '\\t');
+    .replace(/[\u0000-\u001F]+/g, (match) => {
+      // Convert real newlines/tabs into escaped versions
+      return match
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '')
+        .replace(/\t/g, '\\t')
+        .replace(/[\u0000-\u001F]/g, ''); // remove remaining illegal chars
+    });
 
   try {
     return JSON.parse(jsonStr);
   } catch (e) {
-    console.error('JSON Parse Error:', e);
-    console.error('Raw content:', raw);
-    throw new Error('Bad control character in string literal — try again');
+    console.error('Parse failed. Raw response:', raw);
+    throw new Error('Failed to generate valid JSON. Please try again.');
   }
 }
 
